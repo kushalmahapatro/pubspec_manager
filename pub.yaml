@@ -1,0 +1,238 @@
+name: abc
+description: A new Flutter project.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 2.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  # This will ensure the flutter sdk to be 3.3.10 else will fail the flutter command
+  # executed in the respective directory
+  # '3.3.10' doesn't force is to this specified version, rather this means >=3.3.10
+  # There is an open ticket for the same, Issue with the lower constraints for sdk version mentioned.
+  # https://github.com/flutter/flutter/issues/95472
+  flutter: '3.3.10'
+
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.0
+
+  alice:
+    path: packages/alice
+
+
+
+  rxdart: ^0.27.5
+  fast_cached_network_image: ^1.1.1
+  collection: ^1.16.0
+  tuple: ^2.0.1
+  package_info_plus: ^4.0.0
+  cupertino_icons: ^1.0.2
+  file_picker: ^5.2.1
+  image_picker: ^0.8.6
+  video_thumbnail: ^0.5.3
+  record: ^4.4.1
+  path_provider: ^2.0.11
+  provider: ^6.0.4
+  shared_preferences: ^2.0.15
+  flutter_secure_storage: ^8.0.0
+  http: ^0.13.5
+  url_launcher: ^6.1.10
+  native_imaging: ^0.1.0
+  hive: ^2.2.3
+  webview_flutter: ^3.0.4
+  bloc: ^8.1.2
+  flutter_bloc: ^8.1.3
+  modal_bottom_sheet: ^2.1.2
+  flutter_cache_manager: ^3.3.0
+  flutter_blurhash: ^0.7.0
+  carousel_slider: ^4.1.1
+  photo_view: ^0.14.0
+  equatable: ^2.0.5
+  flutter_emoji: ^2.4.0
+  open_filex: ^4.3.1
+  analyzer: ^5.12.0
+  flutter_local_notifications: ^12.0.4
+  flutter_background_service: ^2.4.5
+  flutter_background_service_android: ^3.0.3
+  flutter_apns_only: ^1.6.0
+  queue: ^3.1.0+2
+  wakelock: ^0.6.2
+  device_info_plus: ^9.0.2
+  pasteboard: ^0.2.0
+  desktop_drop: ^0.4.0
+  thumblr: ^0.0.4
+  ffmpeg_kit_flutter_min_gpl: ^5.1.0
+  convert: ^3.1.1
+  window_manager: ^0.3.1
+  disable_battery_optimization: ^1.1.0+1
+  async: ^2.9.0
+  uuid: ^3.0.7
+  flutter_webrtc: ^0.9.20
+  webrtc_interface: ^1.0.10
+  flutter_ringtone_player: ^3.2.0
+  log_4_dart_2: ^1.0.0-rc.1
+  flutter_foreground_task: ^4.0.1
+  fake_async: ^1.3.1
+  sentry_flutter: ^7.6.2
+  sentry: ^7.6.2
+  blurhash_dart: ^1.1.0
+  image: ^3.3.0
+  connectivity_plus: ^3.0.3
+  bot_toast: ^4.0.3
+  archive: ^3.3.0
+  path: ^1.8.2
+  crypto: ^3.0.2
+  audioplayers: ^4.0.1
+  share_plus: ^7.0.0
+  qr_flutter: 4.0.0
+  flutter_barcode_scanner: ^2.0.0
+  wechat_assets_picker: ^8.5.0
+  flutter_svg: ^2.0.5
+
+
+
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  test: any
+  appium_driver: ^0.6.0
+  bloc_test: ^9.1.3
+  build_runner: ^2.3.0
+  mockito: ^5.3.2
+  mason: any
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: any
+
+
+
+dependency_overrides:
+
+
+
+  # blocked upgrade of package_info_plus for null safety
+  # https://github.com/creativecreatorormaybenot/wakelock/pull/203
+  wakelock_windows:
+    git:
+      url: https://github.com/timsneath/wakelock.git
+      ref: 2a9bca63a540771f241d688562351482b2cf234c
+      path: wakelock_windows
+
+  intl: ^0.18.0
+
+  analyzer: ^5.12.0
+
+  webrtc_interface: ^1.0.11
+
+  image: ^3.3.0
+
+  matcher: ^0.12.16
+
+
+
+msix_config:
+  display_name: abc
+  publisher_display_name: aaa
+  identity_name: com.a.a
+  msix_version: 1.0.0.1
+  logo_path: macos\Runner\Assets.xcassets\AppIcon.appiconset\icon_512x512@2x.png
+  capabilities: internetClient, microphone, webcam, picturesLibrary, videosLibrary, removableStorage
+
+
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/
+    - assets/images/common/
+    - assets/images/themes/
+    - assets/app_icon/icon.png
+    - assets/audio/
+
+  generate: true
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  fonts:
+    - family: IconSet
+      fonts:
+        - asset: packages/abc/fonts/IconSet.ttf
+
+    - family: Barlow
+      fonts:
+        - asset: packages/abc/fonts/Barlow-Bold.ttf
+          weight: 700
+        - asset: packages/abc/fonts/Barlow-SemiBold.ttf
+          weight: 600
+        - asset: packages/abc/fonts/Barlow-Medium.ttf
+          weight: 500
+        - asset: packages/abc/fonts/Barlow-Regular.ttf
+          weight: 400
+    - family: Cairo
+      fonts:
+        - asset: packages/abc/fonts/Cairo-Bold.ttf
+          weight: 700
+        - asset: packages/abc/fonts/Cairo-SemiBold.ttf
+          weight: 600
+        - asset: packages/abc/fonts/Cairo-Medium.ttf
+          weight: 500
+        - asset: packages/abc/fonts/Cairo-Regular.ttf
+          weight: 400
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages

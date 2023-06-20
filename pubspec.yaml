@@ -1,0 +1,30 @@
+name: pubspec_manager
+description: A command-line application to manage pubspec dependencies.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+environment:
+  sdk: ^3.0.0
+
+# Add regular dependencies here.
+dependencies:
+  args: ^2.4.2
+  json2yaml: ^3.0.1
+  yaml: ^3.1.2
+
+dev_dependencies:
+  lints: ^2.1.1
+  test: ^1.24.3
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/images/
+    - assets/images/common/
+    - assets/images/themes/
+    - assets/images/empty_state/dark/
+    - assets/images/empty_state/light/
+    - assets/app_icon/icon.png
+    - assets/audio/
+    - assets/audio/dialtone.wav
+    - assets/audio/ringtone.wav

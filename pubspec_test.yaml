@@ -1,0 +1,12 @@
+# Add regular dependencies here.
+dependencies:
+  sticky_grouped_list:
+    git:
+      url: ssh://git@github.com/abc/sticky_grouped_list.git
+      ref: develop
+
+dev_dependencies:
+  olm:
+    git:
+      url: ssh://git@github.com/abc/olm.git
+      ref: develop
