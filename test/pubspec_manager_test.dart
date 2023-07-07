@@ -1,4 +1,4 @@
-import 'package:pubspec_manager/pubspec_manager.dart';
+import 'package:pubm/pubspec_manager.dart';
 import 'package:test/test.dart';
 
 void main() {

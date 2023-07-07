@@ -1,4 +1,4 @@
-import 'package:pubspec_manager/constants.dart';
+import 'package:pubm/constants.dart';
 
 import 'dependencies.dart';
 import 'environment.dart';
