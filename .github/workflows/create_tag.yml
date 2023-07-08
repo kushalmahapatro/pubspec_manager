@@ -31,14 +31,14 @@ jobs:
         uses: actions/github-script@v3
         id: "tag_create"
         env:
-          TAG: ${{ steps.yq.outputs.result }}
+          TAG: 'v${{ steps.yq.outputs.result }}'
         with:
           github-token: ${{ github.token }}
           script: |
             github.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-             ref: "refs/tags/${{ steps.yq.outputs.result }}",
+              ref: "refs/tags/v${{ steps.yq.outputs.result }}",
               sha: context.sha
             })
 
