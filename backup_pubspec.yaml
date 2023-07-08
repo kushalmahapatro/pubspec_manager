@@ -1,21 +1,25 @@
 name: pubm
 description: A command-line application to manage pubspec dependencies.
 version: 1.0.1
-# repository: https://github.com/my_org/my_repo
+
 environment:
   sdk: ^3.0.0
 
-# Add regular dependencies here.
 dependencies:
+  # normal dependencies
+  args: ^2.4.2
+  cli_util: ^0.4.0
+  collection: ^1.17.1
   cupertino_icons: ^1.0.2
-
+  equatable: ^2.0.5
+  get_it: ^7.2.0
+  json2yaml: ^3.0.1
+  path: ^1.8.0
+  yaml: ^3.1.2
 
 dev_dependencies:
-  lints: ^2.1.1
+  # normal dependencies
   test: ^1.24.3
-
-dependency_overrides:
-  cupertino_icons: ^1.0.2
 
 
 flutter:

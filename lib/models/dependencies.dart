@@ -1,4 +1,13 @@
-class GitDependency {
+import 'package:equatable/equatable.dart';
+
+abstract class Dependency {
+  String get name;
+
+  String get reference;
+}
+
+class GitDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String url;
   final String? ref;
@@ -37,9 +46,16 @@ class GitDependency {
       path: map['path'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, url, ref, path];
+
+  @override
+  String get reference => '$name, url: $url, ref: $ref, path: $path';
 }
 
-class PathDependency {
+class PathDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String path;
 
@@ -62,9 +78,16 @@ class PathDependency {
       path: map['path'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, path];
+
+  @override
+  String get reference => '$name, path: $path';
 }
 
-class HostedDependency {
+class HostedDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String hosted;
   final String? version;
@@ -79,7 +102,7 @@ class HostedDependency {
     return {
       'name': {
         'hosted': hosted,
-        if (version != null) 'version': version,
+        if (version != null) 'version': reference,
       },
     };
   }
@@ -91,9 +114,16 @@ class HostedDependency {
       version: map['version'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, hosted, reference];
+
+  @override
+  String get reference => '$name, hosted: $hosted, version: $version';
 }
 
-class NormalDependency {
+class NormalDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String? version;
 
@@ -114,9 +144,16 @@ class NormalDependency {
       version: map['version'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, version];
+
+  @override
+  String get reference => '$name, version: $version';
 }
 
-class SdkDependency {
+class SdkDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String? sdk;
 
@@ -139,4 +176,10 @@ class SdkDependency {
       sdk: map['sdk'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, sdk];
+
+  @override
+  String get reference => '$name, sdk: $sdk';
 }

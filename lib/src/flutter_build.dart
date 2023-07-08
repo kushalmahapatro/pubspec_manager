@@ -26,10 +26,24 @@ class FlutterBuild {
     _logger.trace('build windows files with the command: '
         '"$flutterPath ${flutterBuildArgs.join(' ')}"');
 
-    ProcessResult buildProcess =
+    final ProcessResult buildProcess =
         await Process.run(flutterPath, flutterBuildArgs, runInShell: true);
 
     buildProcess.exitOnError();
+
+    loggerProgress.finish(showTiming: true);
+  }
+
+  Future<void> pubGet() async {
+    var flutterPath = await _getFlutterPath();
+
+    final Progress loggerProgress =
+        _logger.progress('running "flutter pub get"');
+
+    final ProcessResult pubGetProgress =
+        await Process.run(flutterPath, ['pub', 'get'], runInShell: true);
+
+    pubGetProgress.exitOnError();
 
     loggerProgress.finish(showTiming: true);
   }
