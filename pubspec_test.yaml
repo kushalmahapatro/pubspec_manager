@@ -1,5 +1,6 @@
 name: pubm
-description: A command-line application to manage pubspec dependencies.
+description: A Dart command line tool to help with managing pubspec dependencies.
+version: 0.0.1-beta
 environment:
   sdk: ^3.0.0
 
