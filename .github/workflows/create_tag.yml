@@ -7,6 +7,12 @@ on:
 
 jobs:
   create-tag:
+    permissions:
+      repository-projects: write
+      packages: write
+      contents: read
+      pull-requests: write
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +30,8 @@ jobs:
       - name: Print version
         run: echo ${{ steps.yq.outputs.result }}
 
-      - uses: rickstaa/action-create-tag@v1
+      - name: Create tag
+        uses: rickstaa/action-create-tag@v1
 #      - name: Ensure SHA pinned actions
 #        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
         id: "tag_create"
