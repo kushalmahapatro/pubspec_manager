@@ -4,6 +4,12 @@ on:
   pull_request:
     types: [opened, edited, reopened]
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  discussions: write
+
 jobs:
 #  security_hardening:
 #    name: Check security hardening
@@ -17,6 +23,9 @@ jobs:
   assign_author:
     name: Assign Author to the Pull Request
 #    needs: security_hardening
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Assign Author to the Pull Request
@@ -24,7 +33,10 @@ jobs:
 
   pr-labeler:
     name: Label the PR based on the branch
-#    needs: security_hardening
+  #    needs: security_hardening
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Label the Pull Request

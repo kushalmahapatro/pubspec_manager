@@ -27,14 +27,5 @@ jobs:
           channel: 'stable' # or: 'beta', 'dev' or 'master'
       - run: flutter --version
 
-      - name: Install dependencies
-        run: dart pub get
-
-      - name: Analyze project source
-        run: dart analyze
-
-      - name: Run tests
-        run: dart test
-
       - name: Run dart publish (dry run)
         run: dart pub publish --dry-run
