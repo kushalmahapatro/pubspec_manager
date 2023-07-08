@@ -52,7 +52,7 @@ class Configuration {
     flavor = _args['flavor']?.toString() ?? '';
     if (flavor.isEmpty) {
       exitCode = 2;
-      _logger.write('Usage: dart manage.dart -f <flavor>'.red);
+      _logger.stderr('Usage: dart manage.dart -f <flavor>'.red);
       return false;
     }
 
