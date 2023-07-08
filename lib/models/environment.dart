@@ -10,7 +10,7 @@ class Environment {
   Map<String, dynamic> toMap() {
     return {
       'sdk': sdk,
-      'flutter': flutter,
+      if (flutter != null) 'flutter': flutter,
     };
   }
 

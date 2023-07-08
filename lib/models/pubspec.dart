@@ -39,12 +39,12 @@ class Pubspec {
     return {
       'name': name,
       if (description != null) 'description': description,
-      if (version != null) 'version': version,
       if (homepage != null) 'homepage': homepage,
       if (repository != null) 'repository': repository,
       if (issueTracker != null) 'issue_tracker': issueTracker,
       if (documentation != null) 'documentation': documentation,
       if (publishTo != null) 'publish_to': publishTo,
+      if (version != null) 'version': version,
       if (environment != null) 'environment': environment?.toMap(),
       if (dependencies != null)
         'dependencies': dependencies?.toMap(addComments: addComments),

@@ -83,5 +83,6 @@ Dependencies? getDependencies(Map? map) {
     pathDependencies: pathDependencies,
     hostedDependencies: hostedDependencies,
     normalDependencies: normalDependencies,
+    sdkDependencies: sdkDependencies,
   );
 }
