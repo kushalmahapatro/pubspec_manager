@@ -16,14 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-#      - name: Ensure SHA pinned actions
-#        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
 
       - name: Get version
         id: yq
         uses: mikefarah/yq@master
-#      - name: Ensure SHA pinned actions
-#        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
+
         with:
           cmd: yq -r '.version' 'pubspec.yaml'
 
@@ -31,17 +28,25 @@ jobs:
         run: echo ${{ steps.yq.outputs.result }}
 
       - name: Create tag
-        uses: rickstaa/action-create-tag@v1
-#      - name: Ensure SHA pinned actions
-#        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
+        uses: actions/github-script@v3
         id: "tag_create"
+        env:
+          TAG: ${{ steps.yq.outputs.result }}
         with:
-          tag: "v${{ steps.yq.outputs.result }}"
-          tag_exists_error: true
-          message: "V ${{ steps.yq.outputs.result }}"
+          github-token: ${{ github.token }}
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+             ref: "refs/tags/${{ steps.yq.outputs.result }}",
+              sha: context.sha
+            })
 
-      - run: |
-          echo "Tag already present: ${{ steps.tag_create.outputs.tag_exists }}"
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.yq.outputs.result }}
+          token: ${{ secrets.GITHUB_TOKEN }}
         
 
     
