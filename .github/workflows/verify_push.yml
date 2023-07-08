@@ -17,12 +17,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
 
-      # Note: This workflow uses the latest stable version of the Dart SDK.
-      # You can specify other versions if desired, see documentation here:
-      # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      # - uses: dart-lang/setup-dart@v1
       - uses: subosito/flutter-action@v2
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
         with:
           channel: 'stable' # or: 'beta', 'dev' or 'master'
       - run: flutter --version
@@ -30,17 +30,9 @@ jobs:
       - name: Install dependencies
         run: dart pub get
 
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
-
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run: dart analyze
 
-      # Your project will need to have tests in test/ and a dependency on
-      # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
       - name: Run tests
         run: dart test
 

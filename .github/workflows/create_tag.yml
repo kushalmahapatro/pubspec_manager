@@ -10,17 +10,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
 
       - name: Get version
         id: yq
         uses: mikefarah/yq@master
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
         with:
           cmd: yq -r '.version' 'pubspec.yaml'
 
       - name: Print version
         run: echo ${{ steps.yq.outputs.result }}
-        
+
       - uses: rickstaa/action-create-tag@v1
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
         id: "tag_create"
         with:
           tag: "v${{ steps.yq.outputs.result }}"
