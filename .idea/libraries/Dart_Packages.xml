@@ -173,6 +173,7 @@
         <entry key="matcher">
           <value>
             <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/matcher-0.12.16/lib" />
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/matcher-0.12.15/lib" />
             </list>
           </value>
@@ -229,6 +230,7 @@
         <entry key="stream_channel">
           <value>
             <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/stream_channel-2.1.2/lib" />
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/stream_channel-2.1.1/lib" />
             </list>
           </value>
