@@ -1,0 +1,31 @@
+name: Build Release
+
+on:
+  pull_request:
+    types: [ "closed" ]
+    branches: [ "main" ]
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get version
+        id: yq
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq -r '.version' 'pubspec.yaml'
+
+      - name: Print version
+        run: echo ${{ steps.yq.outputs.result }}
+
+      - name: Create tag
+        run: |
+          git tag -a v${{ steps.yq.outputs.result }} -m "Version ${{ steps.yq.outputs.result }}"
+          git push --follow-tags
+        
+
+    
+    
+

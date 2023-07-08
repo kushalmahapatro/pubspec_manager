@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Dart
+name: Verify
 
 on:
   push:
@@ -43,3 +43,6 @@ jobs:
       # want to change this to 'flutter test'.
       - name: Run tests
         run: dart test
+
+      - name: Run dart publish (dry run)
+        run: dart pub publish --dry-run

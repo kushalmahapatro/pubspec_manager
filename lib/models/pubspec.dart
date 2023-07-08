@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:pubm/constants.dart';
 
 import 'dependencies.dart';
@@ -5,8 +6,8 @@ import 'environment.dart';
 import 'flutter_data.dart';
 import 'helper.dart';
 
-class Pubspec {
-  final String name;
+class Pubspec extends Equatable {
+  final String? name;
   final String? description;
   final String? version;
   final String? homepage;
@@ -21,7 +22,7 @@ class Pubspec {
   final FlutterData? flutter;
 
   const Pubspec(
-      {required this.name,
+      {this.name,
       this.description,
       this.version,
       this.homepage,
@@ -37,7 +38,7 @@ class Pubspec {
 
   Map<String, dynamic> toMap({bool addComments = false}) {
     return {
-      'name': name,
+      if (name != null) 'name': name,
       if (description != null) 'description': description,
       if (homepage != null) 'homepage': homepage,
       if (repository != null) 'repository': repository,
@@ -77,9 +78,26 @@ class Pubspec {
           map['flutter'] != null ? FlutterData.fromMap(map['flutter']) : null,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        name,
+        description,
+        version,
+        homepage,
+        repository,
+        issueTracker,
+        documentation,
+        publishTo,
+        environment,
+        dependencies,
+        devDependencies,
+        dependenciesOverride,
+        flutter
+      ];
 }
 
-class Dependencies {
+class Dependencies extends Equatable {
   final List<GitDependency>? gitDependencies;
   final List<PathDependency>? pathDependencies;
   final List<NormalDependency>? normalDependencies;
@@ -147,4 +165,13 @@ class Dependencies {
       sdkDependencies: map['sdkDependencies'] as List<SdkDependency>,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        ...gitDependencies ?? [],
+        ...pathDependencies ?? [],
+        ...normalDependencies ?? [],
+        ...hostedDependencies ?? [],
+        ...sdkDependencies ?? []
+      ];
 }

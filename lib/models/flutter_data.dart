@@ -1,4 +1,6 @@
-class FlutterData {
+import 'package:equatable/equatable.dart';
+
+class FlutterData extends Equatable {
   final bool? usesMaterialDesign;
   final List<String>? assets;
   final bool? generate;
@@ -33,9 +35,13 @@ class FlutterData {
           : null,
     );
   }
+
+  @override
+  List<Object?> get props =>
+      [usesMaterialDesign, ...assets ?? [], generate, ...fonts ?? []];
 }
 
-class Font {
+class Font extends Equatable {
   final String family;
   final List<FontsData>? fonts;
 
@@ -55,9 +61,12 @@ class Font {
             ? (map['fonts'] as List).map((e) => FontsData.fromMap(e)).toList()
             : null);
   }
+
+  @override
+  List<Object?> get props => [family, ...fonts ?? []];
 }
 
-class FontsData {
+class FontsData extends Equatable {
   final String asset;
   final int? weight;
 
@@ -79,4 +88,7 @@ class FontsData {
       weight: map['weight'],
     );
   }
+
+  @override
+  List<Object?> get props => [asset, weight];
 }

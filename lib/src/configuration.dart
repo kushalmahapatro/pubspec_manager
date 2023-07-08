@@ -17,6 +17,9 @@ class Configuration {
   late ArgResults _args;
   List<String>? buildArgs;
   String flavor = '';
+  File backupPubspecFile = File('backup_${Constants.pubspecYamlPath}');
+  File pubspecFile = File(Constants.pubspecYamlPath);
+  File pubspecFlavorFile = File('');
 
   /// Gets the configuration values from from [_arguments] or pubspec.yaml file
   Future<void> getConfigValues() async {
@@ -49,10 +52,11 @@ class Configuration {
     flavor = _args['flavor']?.toString() ?? '';
     if (flavor.isEmpty) {
       exitCode = 2;
-      _logger.write('Usage: dart manage.dart -f <flavor>'.red);
+      _logger.stderr('Usage: dart manage.dart -f <flavor>'.red);
       return false;
     }
 
+    pubspecFlavorFile = File('pubspec_$flavor.yaml');
     return true;
   }
 

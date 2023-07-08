@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:pubm/src/configuration.dart';
 import 'package:pubm/src/pubspec_manage.dart';
 
-class Pubm with PubspecManage {
+class Pubm with PubspecManager {
   Pubm(List<String> args) {
     _setupSingletonServices(args);
   }
