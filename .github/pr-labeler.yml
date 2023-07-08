@@ -2,6 +2,6 @@ bug: hotfix/*
 documentation: docs/*
 feature: ['feature/*', 'feat/*']
 fix: fix/*
-chore :hammer: : chore/*
+chore: chore/*
 path: path/*
 build: build/*

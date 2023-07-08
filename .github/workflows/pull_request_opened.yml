@@ -2,7 +2,7 @@ name: Pull Request (Opened)
 
 on:
   pull_request:
-    types: [opened, edited, reopened]
+    types: [ opened, edited, reopened ]
 
 permissions:
   contents: read
@@ -11,18 +11,18 @@ permissions:
   discussions: write
 
 jobs:
-#  security_hardening:
-#    name: Check security hardening
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Clone the repository
-#        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-#      - name: Ensure SHA pinned actions
-#        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
+  #  security_hardening:
+  #    name: Check security hardening
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Clone the repository
+  #        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+  #      - name: Ensure SHA pinned actions
+  #        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
 
   assign_author:
     name: Assign Author to the Pull Request
-#    needs: security_hardening
+    #    needs: security_hardening
     permissions:
       contents: read
       pull-requests: write
@@ -33,7 +33,7 @@ jobs:
 
   pr-labeler:
     name: Label the PR based on the branch
-  #    needs: security_hardening
+    #    needs: security_hardening
     permissions:
       contents: read
       pull-requests: write
@@ -43,6 +43,18 @@ jobs:
         uses: TimonVS/pr-labeler-action@bd0b592a410983316a454e3d48444608f028ec8e
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  add_reviewer:
+    name: Add Pull Request Reviewer
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: madrapps/add-reviewers@v1
+    with:
+      token: ${{ secrets.GITHUB_TOKEN }}
+      reviewers: kushalmahapatro
+      re-request-when-approved: true
+      re-request-when-changes-requested: true
 
   check-branch:
     runs-on: ubuntu-latest
