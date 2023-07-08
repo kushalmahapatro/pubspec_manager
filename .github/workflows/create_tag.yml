@@ -42,13 +42,3 @@ jobs:
               sha: context.sha
             })
 
-      - name: Create release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.yq.outputs.result }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-        
-
-    
-    
-
