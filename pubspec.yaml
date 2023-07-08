@@ -2,6 +2,8 @@ name: pubm
 description: A command-line application to manage pubspec dependencies.
 version: 0.0.1
 repository: https://github.com/kushalmahapatro/pubspec_manager
+homepage:  https://github.com/kushalmahapatro/pubspec_manager
+
 
 environment:
   sdk: ^3.0.0
