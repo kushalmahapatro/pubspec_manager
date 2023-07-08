@@ -44,18 +44,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  add_reviewer:
-    name: Add Pull Request Reviewer
-    permissions:
-      contents: read
-      pull-requests: write
-    uses: madrapps/add-reviewers@v1
-    with:
-      token: ${{ secrets.GITHUB_TOKEN }}
-      reviewers: kushalmahapatro
-      re-request-when-approved: true
-      re-request-when-changes-requested: true
-
   check-branch:
     runs-on: ubuntu-latest
     name: Check branch
