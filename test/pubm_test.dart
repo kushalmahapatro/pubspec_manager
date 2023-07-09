@@ -229,6 +229,21 @@ version: 0.0.1
 dependencies:
   path_test2: 
    path: abc/def/2
+  a: 1.0.0
+  b: 
+    git:
+      url: git://github.com/flutter/packages.git
+      ref: 1.0.0
+  c: 
+   sdk: flutter
+  e:
+    hosted: https://some-package-server.com
+    version: ^1.0.0
+  f:
+    hosted: 
+      name: some-package
+      url: https://some-package-server.com
+    version: ^1.0.0
 
 flutter:
   fonts:
