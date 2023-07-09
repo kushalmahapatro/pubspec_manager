@@ -9,7 +9,6 @@ topics:
   - pubspec-splitter
   - pubspec-updater
   - pubspec-dependency-manager
-  - pubspec-dependency-updater
 
 
 environment:
