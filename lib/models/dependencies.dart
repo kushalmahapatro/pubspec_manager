@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 abstract class Dependency {
@@ -99,10 +101,15 @@ class HostedDependency extends Equatable implements Dependency {
   });
 
   Map<String, dynamic> toMap() {
+    dynamic hostedMap;
+    try {
+      hostedMap = jsonDecode(hosted);
+    } catch (_) {}
+
     return {
-      'name': {
-        'hosted': hosted,
-        if (version != null) 'version': reference,
+      name: {
+        'hosted': hostedMap ?? hosted,
+        if (version != null) 'version': version,
       },
     };
   }
@@ -110,7 +117,11 @@ class HostedDependency extends Equatable implements Dependency {
   factory HostedDependency.fromMap(Map<String, dynamic> map) {
     return HostedDependency(
       name: map['name'] as String,
-      hosted: map['hosted'] as String,
+      hosted: map['hosted'] is String
+          ? map['hosted']
+          : map['hosted'] is Map
+              ? jsonEncode(map['hosted'])
+              : map['hosted'].toString(),
       version: map['version'] as String,
     );
   }
