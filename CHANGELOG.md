@@ -1,3 +1,7 @@
+## 0.0.2-alpha (2023-07-10)
+### Updated
+- Updated the README.md file to include the new features and also the usage of the package.
+
 ## 0.0.1-alpha (2023-07-09)
 
 ### Initial version.
