@@ -145,6 +145,10 @@ abstract class PubspecChecker {
       return false;
     }
 
+    if (!checkOthers(actualPubspec, flavorPubspec)) {
+      return false;
+    }
+
     return true;
   }
 
@@ -245,6 +249,16 @@ abstract class PubspecChecker {
       );
     }
     return (hasMatch: true, update: [], addition: []);
+  }
+
+  static bool checkOthers(Pubspec actualPubspec, Pubspec flavorPubspec) {
+    if (flavorPubspec.others != null &&
+        !DeepCollectionEquality()
+            .equals(flavorPubspec.others, actualPubspec.others)) {
+      return false;
+    }
+
+    return true;
   }
 
   static bool checkFlutter(Pubspec actualPubspec, Pubspec flavorPubspec) {

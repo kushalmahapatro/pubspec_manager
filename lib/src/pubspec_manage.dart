@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:cli_util/cli_logging.dart';
 import 'package:collection/collection.dart';
@@ -18,6 +19,7 @@ mixin PubspecManager {
   Configuration get config;
 
   Future<void> mergePubspec() async {
+    bool nameChanged = false;
     if (!config.pubspecFlavorFile.existsSync()) {
       logger.stderr('File does not exist: ${config.flavor}'.red);
       return;
@@ -52,6 +54,7 @@ mixin PubspecManager {
     if (!PubspecChecker.checkName(actualPubspec, flavorPubspec)) {
       logger.trace('Updating name from ${actualPubspec.name} to '
           '${flavorPubspec.name}');
+      nameChanged = true;
       finalMap['name'] = flavorPubspec.name;
     }
 
@@ -209,6 +212,37 @@ mixin PubspecManager {
       finalMap['dependency_overrides'] = sortedDOMap;
     }
 
+    /// Other values which are not checked and might be from other plugins
+    if (!DeepCollectionEquality()
+        .equals(flavorPubspec.others, actualPubspec.others)) {
+      logger.trace('Updating others values');
+      Map<String, dynamic> others = {};
+      if (actualPubspec.others != null) {
+        actualPubspec.others!.forEach((key, value) {
+          logger.trace('Updating $key');
+
+          if (value is Map || value is List) {
+            others[key] = jsonDecode(jsonEncode(value));
+          } else {
+            others[key] = value;
+          }
+        });
+      }
+      if (flavorPubspec.others != null) {
+        flavorPubspec.others!.forEach((key, value) {
+          logger.trace('Updating $key');
+
+          if (value is Map || value is List) {
+            others[key] = jsonDecode(jsonEncode(value));
+          } else {
+            others[key] = value;
+          }
+        });
+      }
+
+      finalMap.addAll(others);
+    }
+
     if (flavorPubspec.flutter != null) {
       logger.trace('Updating flutter values');
 
@@ -293,23 +327,44 @@ mixin PubspecManager {
 
     final finalPubspec = Pubspec.fromMap(finalMap);
 
-    final string = json2yaml(
+    /// Convert the `finalMap` to String with pubspec.yaml format
+    final String string = json2yaml(
       finalPubspec.toMap(addComments: true),
       yamlStyle: YamlStyle.pubspecYaml,
     );
 
-    RegExp exp = RegExp("${Constants.comment}\\d+: (.*?)(?=\\s|\$)");
-    String replacedText = string.replaceAllMapped(exp, (Match m) {
+    /// If any of the value contains # then it will be converted to "#"
+    /// ex: hexCode #FFFFFF will be converted to "#FFFFFF"
+    String replacedText =
+        string.replaceAllMapped(RegExp("#(.*?)(?=\\s|\$)"), (Match m) {
+      return '"#${m.group(1)}"';
+    });
+
+    /// This will replace the temp added comment string with #
+    /// [Constants.comment] -> "Pubspec Manager Comment:" will be replaced with "#" in the final pubspec.yaml
+    replacedText = replacedText.replaceAllMapped(
+        RegExp("${Constants.comment}\\d+: (.*?)(?=\\s|\$)"), (Match m) {
       return '# ${m.group(1)}';
     });
 
-    // Save the updated YAML to the file
-    logger.trace('Creating a backup of pubspec.yaml to _pubspec.yaml');
+    /// Save the updated YAML to the file
+    logger.trace('Creating a backup of pubspec.yaml to backup_pubspec.yaml');
     config.backupPubspecFile
         .writeAsStringSync(config.pubspecFile.readAsStringSync());
     config.pubspecFile.writeAsStringSync(replacedText);
 
     logger.stdout('Merging of pubspec.yaml files completed successfully'.green);
+
+    /// Error message when name is changed in the main pubspec.yaml from the flavor pubspec.yaml
+    if (nameChanged) {
+      logger.stderr(
+          'The name is changed from ${actualPubspec.name} to ${flavorPubspec.name} (as the the one mentioned in the pubspec_${config.flavor}.yaml');
+      logger.stderr('This would cause errors in the project.');
+      logger.stderr(
+          'Fix for this would to refactor the places where the package name was used');
+      logger.stderr(
+          "Refactor: import 'package:${actualPubspec.name}/ to import 'package:${flavorPubspec.name}/ ");
+    }
 
     await FlutterBuild().pubGet();
   }
