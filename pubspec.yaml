@@ -1,6 +1,6 @@
 name: pubm
 description: A Dart command line tool to help with managing pubspec dependencies.
-version: 0.0.2-alpha
+version: 0.0.3-alpha
 repository: https://github.com/kushalmahapatro/pubspec_manager
 homepage:  https://github.com/kushalmahapatro/pubspec_manager
 topics:
