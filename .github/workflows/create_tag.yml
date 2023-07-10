@@ -1,4 +1,4 @@
-name: Build Release
+name: Create Tag and Publish to pub.dev
 
 on:
   pull_request:
@@ -30,7 +30,7 @@ jobs:
 
       - name: Create tag
         uses: actions/github-script@v3
-        id: "tag_create"
+        id: tagCreate
         env:
           TAG: 'v${{ steps.yq.outputs.result }}'
         with:
@@ -43,10 +43,13 @@ jobs:
               sha: context.sha
             })
       - name: Print tag update
-        run: echo ${{ steps.tag_create.outputs.result }}
+        run: echo ${{ steps.tagCreate.outputs.result }}
 
       - name: Publish
-        if: steps.tag_create.outputs.result != null
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: flutter --version
         uses: k-paxian/dart-package-publisher@v1.5.1
         with:
           credentialJson: ${{ secrets.CREDENTIAL_JSON }}
