@@ -7,7 +7,7 @@ on:
 
 jobs:
   create-tag:
-    if: github.event.pull_request.merged == true && github.event.review.state == 'approved'
+    if: github.event.pull_request.merged == true
     permissions:
       repository-projects: write
       packages: write
