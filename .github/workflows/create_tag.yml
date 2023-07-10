@@ -7,6 +7,7 @@ on:
 
 jobs:
   create-tag:
+    if: github.event.pull_request.merged == true && github.event.review.state == 'approved'
     permissions:
       repository-projects: write
       packages: write
@@ -41,4 +42,15 @@ jobs:
               ref: "refs/tags/v${{ steps.yq.outputs.result }}",
               sha: context.sha
             })
+      - name: Print tag update
+        run: echo ${{ steps.tag_create.outputs.result }}
+
+      - name: Publish
+        if: steps.tag_create.outputs.result != null
+        uses: k-paxian/dart-package-publisher@v1.5.1
+        with:
+          credentialJson: ${{ secrets.CREDENTIAL_JSON }}
+          flutter: true
+          skipTests: true
+
 

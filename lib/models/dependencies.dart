@@ -23,12 +23,6 @@ class GitDependency extends Equatable implements Dependency {
   });
 
   Map<String, dynamic> toMap() {
-    if (ref == null && path == null) {
-      return {
-        name: url,
-      };
-    }
-
     return {
       name: {
         'git': {
@@ -130,7 +124,19 @@ class HostedDependency extends Equatable implements Dependency {
   List<Object?> get props => [name, hosted, reference];
 
   @override
-  String get reference => '$name, hosted: $hosted, version: $version';
+  String get reference {
+    dynamic hostedMap;
+    try {
+      hostedMap = jsonDecode(hosted);
+      String h = '';
+      hostedMap.forEach((key, value) {
+        h += '$key: $value, ';
+      });
+      return '$name, $h version: $version';
+    } catch (_) {}
+
+    return '$name, hosted: $hosted, version: $version';
+  }
 }
 
 class NormalDependency extends Equatable implements Dependency {

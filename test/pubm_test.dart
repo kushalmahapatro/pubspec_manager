@@ -283,6 +283,68 @@ flutter:
 
       expect(result2, true);
     });
+
+    test('merge flavor pubspec to pubspec with git dependency with url',
+        () async {
+      const content2 = '''
+
+dependencies:
+  b: 
+    git:
+      url: git://github.com/flutter/packages.git
+  ''';
+      await File(pubspecPath).writeAsString(yamlContent);
+      await File(pubspecFlavorPath).writeAsString(content2);
+      await testClass.mergePubspec();
+      final result2 = PubspecChecker.checkIfPubspecAlreadyMerged(
+        actualPubspec:
+            Pubspec.fromMap(loadYaml(config.pubspecFile.readAsStringSync())),
+        flavorPubspec: Pubspec.fromMap(
+            loadYaml(config.pubspecFlavorFile.readAsStringSync())),
+      );
+
+      expect(result2, true);
+    });
+    test('merge flavor pubspec to pubspec with other dependencies', () async {
+      const content2 = '''
+msix_config:
+  display_name: Flutter App
+  publisher_display_name: Company Name
+  identity_name: company.suite.flutterapp
+  msix_version: 1.0.0.0
+  logo_path: C:\\path\\to\\logo.png
+  capabilities: internetClient, location, microphone, webcam
+  
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "path/to/image.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "path/to/image.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "path/to/image.png"
+  ''';
+      await File(pubspecPath).writeAsString(yamlContent);
+      await File(pubspecFlavorPath).writeAsString(content2);
+      await testClass.mergePubspec();
+      final result2 = PubspecChecker.checkIfPubspecAlreadyMerged(
+        actualPubspec:
+            Pubspec.fromMap(loadYaml(config.pubspecFile.readAsStringSync())),
+        flavorPubspec: Pubspec.fromMap(
+            loadYaml(config.pubspecFlavorFile.readAsStringSync())),
+      );
+
+      expect(result2, true);
+    });
   });
 }
 

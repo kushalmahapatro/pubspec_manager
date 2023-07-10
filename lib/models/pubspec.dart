@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:pubm/constants.dart';
 
@@ -20,21 +22,24 @@ class Pubspec extends Equatable {
   final Dependencies? devDependencies;
   final Dependencies? dependenciesOverride;
   final FlutterData? flutter;
+  final Map<String, dynamic>? others;
 
-  const Pubspec(
-      {this.name,
-      this.description,
-      this.version,
-      this.homepage,
-      this.repository,
-      this.issueTracker,
-      this.documentation,
-      this.publishTo,
-      this.environment,
-      this.dependencies,
-      this.devDependencies,
-      this.dependenciesOverride,
-      this.flutter});
+  const Pubspec({
+    this.name,
+    this.description,
+    this.version,
+    this.homepage,
+    this.repository,
+    this.issueTracker,
+    this.documentation,
+    this.publishTo,
+    this.environment,
+    this.dependencies,
+    this.devDependencies,
+    this.dependenciesOverride,
+    this.flutter,
+    this.others,
+  });
 
   Map<String, dynamic> toMap({bool addComments = false}) {
     return {
@@ -55,28 +60,56 @@ class Pubspec extends Equatable {
         'dependency_overrides':
             dependenciesOverride?.toMap(addComments: addComments),
       if (flutter != null) 'flutter': flutter?.toMap(),
+      if (others != null) ...others!
     };
   }
 
   factory Pubspec.fromMap(Map map) {
-    return Pubspec(
-      name: map['name'] ?? '',
-      description: map['description'],
-      version: map['version'],
-      homepage: map['homepage'],
-      repository: map['repository'],
-      issueTracker: map['issue_tracker'],
-      documentation: map['documentation'],
-      publishTo: map['publish_to'],
-      environment: map['environment'] != null
-          ? Environment.fromMap(map['environment'])
-          : null,
-      dependencies: getDependencies(map['dependencies']),
-      devDependencies: getDependencies(map['dev_dependencies']),
-      dependenciesOverride: getDependencies(map['dependency_overrides']),
-      flutter:
-          map['flutter'] != null ? FlutterData.fromMap(map['flutter']) : null,
-    );
+    Pubspec pubspec = Pubspec();
+    Map<String, dynamic> others = {};
+    map.forEach((key, value) {
+      if (key == 'name') {
+        pubspec = pubspec.copyWith(name: value);
+      } else if (key == 'description') {
+        pubspec = pubspec.copyWith(description: value);
+      } else if (key == 'version') {
+        pubspec = pubspec.copyWith(version: value);
+      } else if (key == 'homepage') {
+        pubspec = pubspec.copyWith(homepage: value);
+      } else if (key == 'repository') {
+        pubspec = pubspec.copyWith(repository: value);
+      } else if (key == 'issue_tracker') {
+        pubspec = pubspec.copyWith(issueTracker: value);
+      } else if (key == 'documentation') {
+        pubspec = pubspec.copyWith(documentation: value);
+      } else if (key == 'publish_to') {
+        pubspec = pubspec.copyWith(publishTo: value);
+      } else if (key == 'environment') {
+        pubspec = pubspec.copyWith(
+            environment: Environment.fromMap(value.cast<String, dynamic>()));
+      } else if (key == 'dependencies') {
+        pubspec = pubspec.copyWith(
+            dependencies: getDependencies(value.cast<String, dynamic>()));
+      } else if (key == 'dev_dependencies') {
+        pubspec = pubspec.copyWith(
+            devDependencies: getDependencies(value.cast<String, dynamic>()));
+      } else if (key == 'dependency_overrides') {
+        pubspec = pubspec.copyWith(
+            dependenciesOverride:
+                getDependencies(value.cast<String, dynamic>()));
+      } else if (key == 'flutter') {
+        pubspec = pubspec.copyWith(
+            flutter: FlutterData.fromMap(value.cast<String, dynamic>()));
+      } else {
+        if (value is Map || value is List) {
+          others[key] = jsonDecode(jsonEncode(value));
+        } else {
+          others[key] = value;
+        }
+      }
+    });
+    pubspec = pubspec.copyWith(others: others);
+    return pubspec;
   }
 
   @override
@@ -93,8 +126,43 @@ class Pubspec extends Equatable {
         dependencies,
         devDependencies,
         dependenciesOverride,
-        flutter
+        flutter,
+        others
       ];
+
+  Pubspec copyWith({
+    String? name,
+    String? description,
+    String? version,
+    String? homepage,
+    String? repository,
+    String? issueTracker,
+    String? documentation,
+    String? publishTo,
+    Environment? environment,
+    Dependencies? dependencies,
+    Dependencies? devDependencies,
+    Dependencies? dependenciesOverride,
+    FlutterData? flutter,
+    Map<String, dynamic>? others,
+  }) {
+    return Pubspec(
+      name: name ?? this.name,
+      description: description ?? this.description,
+      version: version ?? this.version,
+      homepage: homepage ?? this.homepage,
+      repository: repository ?? this.repository,
+      issueTracker: issueTracker ?? this.issueTracker,
+      documentation: documentation ?? this.documentation,
+      publishTo: publishTo ?? this.publishTo,
+      environment: environment ?? this.environment,
+      dependencies: dependencies ?? this.dependencies,
+      devDependencies: devDependencies ?? this.devDependencies,
+      dependenciesOverride: dependenciesOverride ?? this.dependenciesOverride,
+      flutter: flutter ?? this.flutter,
+      others: others ?? this.others,
+    );
+  }
 }
 
 class Dependencies extends Equatable {
