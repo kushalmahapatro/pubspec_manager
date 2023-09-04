@@ -1,6 +1,9 @@
 name: Create Tag and Publish to pub.dev
 
 on:
+  pull_request:
+    types:
+      - closed
   workflow_run:
     workflows: ["Trigger Create Tag and Publish Workflow on PR Merge", "Check Version"]
     types:
