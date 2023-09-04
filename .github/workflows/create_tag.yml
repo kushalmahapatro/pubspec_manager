@@ -23,6 +23,15 @@ jobs:
   #   uses: ./.github/workflows/trigger_on_pr_merge.yml
   #   secrets: 
   #     TRIGGER_CREATE_TAG_AND_PUBLISH: ${{ secrets.TRIGGER_CREATE_TAG_AND_PUBLISH }}
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Debug
+      run: |
+        echo "TRIGGER_NEXT_ACTION: $TRIGGER_NEXT_ACTION"
+        echo "if condition: ${{ needs.call-check-version.outputs.TRIGGER_NEXT_ACTION == 'true' }}"
+    env:
+      TRIGGER_NEXT_ACTION: ${{ needs.call-check-version.outputs.TRIGGER_NEXT_ACTION }}
 
   create-tag-and-publish:
     permissions:
