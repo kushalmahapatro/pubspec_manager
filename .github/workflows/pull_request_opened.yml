@@ -1,4 +1,4 @@
-name: Pull Request (Opened)
+name: Pull Request 
 
 on:
   pull_request:
@@ -11,7 +11,6 @@ permissions:
   discussions: write
 
 jobs:
-
   assign_author:
     name: Assign Author to the Pull Request
     permissions:
