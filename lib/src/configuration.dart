@@ -40,11 +40,11 @@ class Configuration {
     _logger.trace('validating config values');
 
     if (_args['help']) {
-      _logger.stdout('Usage: dart run pubm:manage -f <flavor>');
+      _logger.stdout('Usage: pubm -f <flavor>');
       _logger.stdout(
-          'Usage: dart run pubm:manage -f <flavor> -v (verbose) to enable verbose mode');
+          'Usage: pubm -f <flavor> -v (verbose) to enable verbose mode');
       _logger.stdout(
-          'Usage: dart run pubm:manage -h to get the list of available commands and how to use');
+          'Usage: pubm -h to get the list of available commands and how to use');
 
       return false;
     }

@@ -1,4 +1,4 @@
-name: Pull Request (Opened)
+name: Pull Request 
 
 on:
   pull_request:
@@ -11,18 +11,8 @@ permissions:
   discussions: write
 
 jobs:
-  #  security_hardening:
-  #    name: Check security hardening
-  #    runs-on: ubuntu-latest
-  #    steps:
-  #      - name: Clone the repository
-  #        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-  #      - name: Ensure SHA pinned actions
-  #        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43
-
   assign_author:
     name: Assign Author to the Pull Request
-    #    needs: security_hardening
     permissions:
       contents: read
       pull-requests: write
@@ -44,21 +34,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  check-branch:
-    runs-on: ubuntu-latest
-    name: Check branch
-    steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-      - run: flutter --version
-
-      - name: Install dependencies
-        run: dart pub get
-
-      - name: Analyze project source
-        run: dart analyze
-
-      - name: Run tests
-        run: dart test

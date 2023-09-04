@@ -1,0 +1,26 @@
+name: Trigger Create Tag and Publish Workflow on PR Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  trigger-create-tag-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if PR is merged into main
+        id: check_merged
+        run: |
+          if [ "${{ github.event.pull_request.merged }}" = "true" ] && [ "${{ github.event.pull_request.base.ref }}" = "main" ]; then
+            echo "true"
+          else
+            echo "false"
+          fi
+
+      - name: Set trigger_create_tag_and_publish output
+        id: set_output
+        env:
+          TRIGGER_CREATE_TAG_AND_PUBLISH: ${{ steps.check_merged.outputs.outputs.result}}
+        run: echo "set-env:TRIGGER_CREATE_TAG_AND_PUBLISH=${{ steps.check_merged.outputs.outputs.result}}" >> $GITHUB_ENV

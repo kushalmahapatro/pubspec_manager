@@ -13,16 +13,31 @@ For Flutter projects, use:
 PS c:\src\flutter_project> flutter pub add --dev pubm
 ```
 
+###### 🎯 Activate from https://pub.dev
+to use the executable, run the following command in your terminal:
+
+```console
+dart pub global activate pubm
+```
+
 ## 📋 Usage
 
 To manage different versions of pubspec.yaml files, create a new file for each flavor with the name `pubspec_<flavor>.yaml`. When the following command is executed, the pubspec.yaml file is updated with the contents of the `pubspec_<flavor>.yaml` file. This can be used to update, change, or add dependencies and their respective versions, as well as Flutter fonts.
 
 ```console  
-PS c:\src\flutter_project> dart run pubm:manage -f <flavor>
+# if activated from https://pub.dev
+pubm -f <flavor>
+
+# else
+dart run pubm:manage -f <flavor>
 ```
 Use the -v flag to print detailed logs (verbose logs) in the console.console.
 ```console  
-PS c:\src\flutter_project> dart run pubm:manage -f <flavor> -v
+# if activated from https://pub.dev
+pubm -f <flavor> -v
+
+# else
+dart run pubm:manage -f <flavor> -v
 ```
 ### 📋 Example: pubpsec_dev.yaml
 Here's an example of a flavor-specific pubspec.yaml file for a 'dev' flavor:
@@ -106,6 +121,10 @@ flutter:
 After running the below command, the output pubspec.yaml file will be as follows:
 ##### Command:
 ```console
+# if activated from https://pub.dev
+pubm -f dev
+
+# else
 dart run pubm:manage -f dev
 ```
 ##### Output
