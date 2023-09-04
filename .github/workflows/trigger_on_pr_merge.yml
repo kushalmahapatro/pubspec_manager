@@ -4,14 +4,14 @@ on:
   pull_request:
     types:
       - closed
-  workflow_call:
-    secrets:
-      TRIGGER_CREATE_TAG_AND_PUBLISH: 
-        required: true
-        description: |
-          Set to true to trigger the Create Tag and Publish workflow.
-          Set to false to not trigger the Create Tag and Publish workflow.
-          Set to anything else to not trigger the Create Tag and Publish workflow.
+  # workflow_call:
+  #   secrets:
+  #     TRIGGER_CREATE_TAG_AND_PUBLISH: 
+  #       required: true
+  #       description: |
+  #         Set to true to trigger the Create Tag and Publish workflow.
+  #         Set to false to not trigger the Create Tag and Publish workflow.
+  #         Set to anything else to not trigger the Create Tag and Publish workflow.
 
   
 
@@ -34,4 +34,15 @@ jobs:
         run: echo "set-env:TRIGGER_CREATE_TAG_AND_PUBLISH=${{ steps.check_merged.outputs.result}}" >> $GITHUB_ENV
         env:
           TRIGGER_CREATE_TAG_AND_PUBLISH: ${{ steps.check_merged.outputs.result}}
+      
+      - name: Trigger dependent workflow
+        run: |
+            if [ "${{ steps.check_merged.outputs.result }}" = "true" ]; then
+              curl -X POST \
+                -H "Accept: application/vnd.github.v3+json" \
+                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                https://api.github.com/repos/${{ github.repository }}/actions/workflows/create_tag.yml/dispatches \
+                -d '{"ref": "main"}'
+            fi
+          
        
