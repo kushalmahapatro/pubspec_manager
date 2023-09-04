@@ -1,3 +1,7 @@
+### 0.1.0 (2023-08-05)
+#### Added
+- Added 'pubm' executable, can be activated by `dart pub global activate pubm`.
+
 ### 0.0.3-alpha (2023-07-11)
 #### Added
 - Added support for Addition/Others params in pubspec.yaml file. (like msix_config, flutter_launcher_icons)

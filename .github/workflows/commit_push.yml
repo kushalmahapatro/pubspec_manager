@@ -5,7 +5,10 @@ on:
   push:
     branches:
       - '*'
-  
+
+env:
+  flutter_version: "3.13.0"
+  java_version: "12.x"
 
 permissions:
   contents: read
@@ -19,18 +22,15 @@ jobs:
     runs-on: ubuntu-latest
     name: Check branch
     steps:
-      - uses: actions/checkout@v2
-      - name: Cache Flutter SDK
-        uses: actions/cache@v2
-        with:
-          path: ~/.pub-cache
-          key: flutter-sdk-${{ runner.os }}-${{ hashFiles('**/pubspec.yaml') }}
-          restore-keys: |
-            flutter-sdk-${{ runner.os }}-
       - uses: actions/checkout@v3
+      - name: Cache Flutter SDK
+        uses: actions/cache@v3
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_version }}
       - uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          flutter-version: ${{ env.flutter_version }}
       - run: flutter --version
 
       - name: Install dependencies

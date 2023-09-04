@@ -34,25 +34,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  check-branch:
-    runs-on: ubuntu-latest
-    name: Check branch
-    steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-      - run: flutter --version
-
-      - name: Install dependencies
-        run: dart pub get
-
-      - name: Analyze project source
-        run: dart analyze
-
-      - name: Run tests
-        run: dart test
-
-      - name: Run dart publish (dry run)
-        if: ${{ github.event.pull_request.base.ref == 'main' }}
-        run: dart pub publish --dry-run
