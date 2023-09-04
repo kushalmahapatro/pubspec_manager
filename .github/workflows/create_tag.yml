@@ -16,9 +16,13 @@ jobs:
   
   call-check-version:
     uses: ./.github/workflows/check_version.yml
+    secrets: 
+      TRIGGER_NEXT_ACTION: ${{ secrets.TRIGGER_NEXT_ACTION }}
   
   call-trigger-create-tag-and-publish:
     uses: ./.github/workflows/trigger_on_pr_merge.yml
+    secrets: 
+      TRIGGER_CREATE_TAG_AND_PUBLISH: ${{ secrets.TRIGGER_CREATE_TAG_AND_PUBLISH }}
 
   create-tag-and-publish:
     permissions:
@@ -31,7 +35,7 @@ jobs:
     needs: [placeholder-job, call-check-version, call-trigger-create-tag-and-publish]
     
 
-    if: ${{ needs.call-check-version.outputs.TRIGGER_NEXT_ACTION == 'true' && needs.call-trigger-create-tag-and-publish.outputs.TRIGGER_CREATE_TAG_AND_PUBLISH == 'true' }}
+    if: ${{ needs.call-check-version.TRIGGER_NEXT_ACTION == 'true' && needs.call-trigger-create-tag-and-publish.TRIGGER_CREATE_TAG_AND_PUBLISH == 'true' }}
     
     steps:
       - uses: actions/checkout@v3
