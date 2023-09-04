@@ -2,7 +2,14 @@ name: Trigger Create Tag and Publish Workflow on PR Merge
 
 on:
   workflow_call:
-    
+    secrets:
+      TRIGGER_CREATE_TAG_AND_PUBLISH: 
+        required: true
+        description: |
+          Set to true to trigger the Create Tag and Publish workflow.
+          Set to false to not trigger the Create Tag and Publish workflow.
+          Set to anything else to not trigger the Create Tag and Publish workflow.
+
   pull_request:
     types:
       - closed
@@ -23,6 +30,7 @@ jobs:
 
       - name: Set trigger_create_tag_and_publish output
         id: set_output
+        run: echo "set-env:TRIGGER_CREATE_TAG_AND_PUBLISH=${{ steps.check_merged.outputs.outputs.result}}" >> $GITHUB_ENV
         env:
           TRIGGER_CREATE_TAG_AND_PUBLISH: ${{ steps.check_merged.outputs.outputs.result}}
-        run: echo "set-env:TRIGGER_CREATE_TAG_AND_PUBLISH=${{ steps.check_merged.outputs.outputs.result}}" >> $GITHUB_ENV
+       

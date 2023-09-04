@@ -2,6 +2,10 @@ name: Check Version
 
 on:
   workflow_call:
+    secrets:
+      TRIGGER_NEXT_ACTION: 
+        required: true
+        description: 'Trigger Next Action'
   
   pull_request:
     branches:
