@@ -30,7 +30,7 @@ jobs:
 
       - name: Set trigger_create_tag_and_publish output
         id: set_output
-        run: echo "set-env:TRIGGER_CREATE_TAG_AND_PUBLISH=${{ steps.check_merged.outputs.outputs.result}}" >> $GITHUB_ENV
+        run: echo "set-env:TRIGGER_CREATE_TAG_AND_PUBLISH=${{ steps.check_merged.outputs.result}}" >> $GITHUB_ENV
         env:
-          TRIGGER_CREATE_TAG_AND_PUBLISH: ${{ steps.check_merged.outputs.outputs.result}}
+          TRIGGER_CREATE_TAG_AND_PUBLISH: ${{ steps.check_merged.outputs.result}}
        
