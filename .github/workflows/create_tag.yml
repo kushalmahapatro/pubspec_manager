@@ -22,9 +22,9 @@ jobs:
       pull-requests: write
 
     runs-on: ubuntu-latest
-    needs: [placeholder-job, check_version.check-version, trigger_on_pr_merge.trigger-create-tag-and-publish]
+    needs: [placeholder-job, check-version, trigger-create-tag-and-publish]
 
-    if: ${{ needs.trigger_next_action.outputs.TRIGGER_NEXT_ACTION == 'true' && needs.trigger_create_tag_and_publish.outputs.TRIGGER_CREATE_TAG_AND_PUBLISH == 'true' }}
+    if: ${{ needs.check-version.outputs.TRIGGER_NEXT_ACTION == 'true' && needs.trigger-create-tag-and-publish.outputs.TRIGGER_CREATE_TAG_AND_PUBLISH == 'true' }}
     
     steps:
       - uses: actions/checkout@v3
