@@ -1,6 +1,9 @@
 name: Trigger Create Tag and Publish Workflow on PR Merge
 
 on:
+  pull_request:
+    types:
+      - closed
   workflow_call:
     secrets:
       TRIGGER_CREATE_TAG_AND_PUBLISH: 
@@ -10,9 +13,7 @@ on:
           Set to false to not trigger the Create Tag and Publish workflow.
           Set to anything else to not trigger the Create Tag and Publish workflow.
 
-  pull_request:
-    types:
-      - closed
+  
 
 jobs:
   trigger-create-tag-and-publish:
