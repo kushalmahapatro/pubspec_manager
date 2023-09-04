@@ -65,6 +65,8 @@ jobs:
         fi
 
     - name: Trigger Next Action
-      run: echo "Trigger Next Action ${{ steps.check_version.outputs.trigger_next_action }}"
+      run: |
+        echo "Trigger Next Action ${{ steps.check_version.outputs.trigger_next_action }}"
+        echo "set-env:TRIGGER_NEXT_ACTION=${{ steps.check_version.outputs.trigger_next_action}}" >> $GITHUB_ENV
       env:
         TRIGGER_NEXT_ACTION: ${{ steps.check_version.outputs.trigger_next_action }}

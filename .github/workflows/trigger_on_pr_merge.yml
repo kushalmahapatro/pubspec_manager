@@ -23,6 +23,7 @@ jobs:
       - name: Check if PR is merged into main
         id: check_merged
         run: |
+          sleep 120
           if [ "${{ github.event.pull_request.merged }}" = "true" ] && [ "${{ github.event.pull_request.base.ref }}" = "main" ]; then
             echo "true"
           else
