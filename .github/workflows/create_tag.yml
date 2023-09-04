@@ -13,6 +13,12 @@ jobs:
     steps:
       - name: Placeholder Step
         run: echo "This is a placeholder job"
+  
+  call-check-version:
+    uses: ./.github/workflows/check_version.yml
+  
+  call-trigger-create-tag-and-publish:
+    uses: ./.github/workflows/trigger_on_pr_merge.yml
 
   create-tag-and-publish:
     permissions:
@@ -22,9 +28,10 @@ jobs:
       pull-requests: write
 
     runs-on: ubuntu-latest
-    needs: [placeholder-job, check-version, trigger-create-tag-and-publish]
+    needs: [placeholder-job, call-check-version, call-trigger-create-tag-and-publish]
+    
 
-    if: ${{ needs.check-version.outputs.TRIGGER_NEXT_ACTION == 'true' && needs.trigger-create-tag-and-publish.outputs.TRIGGER_CREATE_TAG_AND_PUBLISH == 'true' }}
+    if: ${{ needs.call-check-version.outputs.TRIGGER_NEXT_ACTION == 'true' && needs.call-trigger-create-tag-and-publish.outputs.TRIGGER_CREATE_TAG_AND_PUBLISH == 'true' }}
     
     steps:
       - uses: actions/checkout@v3

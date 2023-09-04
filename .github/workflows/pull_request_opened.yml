@@ -23,7 +23,6 @@ jobs:
 
   pr-labeler:
     name: Label the PR based on the branch
-    #    needs: security_hardening
     permissions:
       contents: read
       pull-requests: write

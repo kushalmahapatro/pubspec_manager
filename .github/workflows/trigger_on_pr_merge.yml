@@ -1,6 +1,8 @@
 name: Trigger Create Tag and Publish Workflow on PR Merge
 
 on:
+  workflow_call:
+    
   pull_request:
     types:
       - closed

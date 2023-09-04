@@ -1,6 +1,8 @@
 name: Check Version
 
 on:
+  workflow_call:
+  
   pull_request:
     branches:
       - main
