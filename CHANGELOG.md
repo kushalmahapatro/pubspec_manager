@@ -1,4 +1,8 @@
-### 0.1.0 (2023-08-05)
+### 0.1.1 (2023-09-19)
+#### Fixed
+- Deep check for other dependencies  to avoid changes to pubspec.yaml file if the dependencies are same.
+
+### 0.1.0 (2023-09-05)
 #### Added
 - Added 'pubm' executable, can be activated by `dart pub global activate pubm`.
 

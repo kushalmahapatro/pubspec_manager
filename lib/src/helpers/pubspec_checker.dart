@@ -252,7 +252,7 @@ abstract class PubspecChecker {
   }
 
   static bool checkOthers(Pubspec actualPubspec, Pubspec flavorPubspec) {
-    if (flavorPubspec.others != null &&
+    if ((flavorPubspec.others ?? {}).isNotEmpty &&
         !DeepCollectionEquality()
             .equals(flavorPubspec.others, actualPubspec.others)) {
       return false;
