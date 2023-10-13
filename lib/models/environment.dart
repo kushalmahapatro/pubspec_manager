@@ -1,4 +1,6 @@
-class Environment {
+import 'package:equatable/equatable.dart';
+
+class Environment extends Equatable {
   final String sdk;
   final String? flutter;
 
@@ -10,7 +12,7 @@ class Environment {
   Map<String, dynamic> toMap() {
     return {
       'sdk': sdk,
-      'flutter': flutter,
+      if (flutter != null) 'flutter': flutter,
     };
   }
 
@@ -20,4 +22,7 @@ class Environment {
       flutter: map['flutter'],
     );
   }
+
+  @override
+  List<Object?> get props => [sdk, flutter];
 }

@@ -1,4 +1,15 @@
-class GitDependency {
+import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
+
+abstract class Dependency {
+  String get name;
+
+  String get reference;
+}
+
+class GitDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String url;
   final String? ref;
@@ -12,12 +23,6 @@ class GitDependency {
   });
 
   Map<String, dynamic> toMap() {
-    if (ref == null && path == null) {
-      return {
-        name: url,
-      };
-    }
-
     return {
       name: {
         'git': {
@@ -37,9 +42,16 @@ class GitDependency {
       path: map['path'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, url, ref, path];
+
+  @override
+  String get reference => '$name, url: $url, ref: $ref, path: $path';
 }
 
-class PathDependency {
+class PathDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String path;
 
@@ -62,9 +74,16 @@ class PathDependency {
       path: map['path'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, path];
+
+  @override
+  String get reference => '$name, path: $path';
 }
 
-class HostedDependency {
+class HostedDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String hosted;
   final String? version;
@@ -76,9 +95,14 @@ class HostedDependency {
   });
 
   Map<String, dynamic> toMap() {
+    dynamic hostedMap;
+    try {
+      hostedMap = jsonDecode(hosted);
+    } catch (_) {}
+
     return {
-      'name': {
-        'hosted': hosted,
+      name: {
+        'hosted': hostedMap ?? hosted,
         if (version != null) 'version': version,
       },
     };
@@ -87,13 +111,36 @@ class HostedDependency {
   factory HostedDependency.fromMap(Map<String, dynamic> map) {
     return HostedDependency(
       name: map['name'] as String,
-      hosted: map['hosted'] as String,
+      hosted: map['hosted'] is String
+          ? map['hosted']
+          : map['hosted'] is Map
+              ? jsonEncode(map['hosted'])
+              : map['hosted'].toString(),
       version: map['version'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, hosted, reference];
+
+  @override
+  String get reference {
+    dynamic hostedMap;
+    try {
+      hostedMap = jsonDecode(hosted);
+      String h = '';
+      hostedMap.forEach((key, value) {
+        h += '$key: $value, ';
+      });
+      return '$name, $h version: $version';
+    } catch (_) {}
+
+    return '$name, hosted: $hosted, version: $version';
+  }
 }
 
-class NormalDependency {
+class NormalDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String? version;
 
@@ -114,9 +161,16 @@ class NormalDependency {
       version: map['version'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, version];
+
+  @override
+  String get reference => '$name, version: $version';
 }
 
-class SdkDependency {
+class SdkDependency extends Equatable implements Dependency {
+  @override
   final String name;
   final String? sdk;
 
@@ -139,4 +193,10 @@ class SdkDependency {
       sdk: map['sdk'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [name, sdk];
+
+  @override
+  String get reference => '$name, sdk: $sdk';
 }

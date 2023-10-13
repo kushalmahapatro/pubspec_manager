@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'dependencies.dart';
 import 'pubspec.dart';
 
@@ -48,12 +50,24 @@ Dependencies? getDependencies(Map? map) {
           ),
         );
         break;
+      case {'hosted': Map hosted, 'version': String version}:
+        hostedDependencies.add(
+          HostedDependency(
+            name: key,
+            hosted: hosted.containsKey('hosted')
+                ? hosted['hosted']
+                : jsonEncode(hosted),
+            version: version,
+          ),
+        );
+        break;
       case {'hosted': Map hosted}:
         hostedDependencies.add(
           HostedDependency(
             name: key,
-            hosted: hosted['hosted'],
-            version: hosted['version'],
+            hosted: hosted.containsKey('hosted')
+                ? hosted['hosted']
+                : jsonEncode(hosted),
           ),
         );
         break;
@@ -83,5 +97,6 @@ Dependencies? getDependencies(Map? map) {
     pathDependencies: pathDependencies,
     hostedDependencies: hostedDependencies,
     normalDependencies: normalDependencies,
+    sdkDependencies: sdkDependencies,
   );
 }

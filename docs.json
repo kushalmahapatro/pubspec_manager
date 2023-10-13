@@ -1,0 +1,35 @@
+{
+  "name": "pubm",
+  "theme": "0060A7",
+  "googleAnalytics": "",
+  "docsearch": {
+    "appId": "",
+    "apiKey": "",
+    "indexName": "pubm"
+  },
+  "anchors": [
+    { "title": "Homepage", "icon": "house", "link": "https://github.com/kushalmahapatro/pubspec_manager"}
+  ],
+  "variables": {
+    "versions": {
+      "latest": "0.0.1",
+      "next": "1.0.0"
+    }
+  },
+  "sidebar": [
+    [
+      "Overview",
+      [
+        [
+          "Overview", "/index"
+        ]
+      ]
+    ],
+    [
+      "Contribution",
+      [
+        ["Getting Started", "/contribution/get-started"]
+      ]
+    ]
+  ]
+}

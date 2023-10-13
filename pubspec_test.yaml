@@ -1,12 +1,17 @@
+name: pubm
+description: A Dart command line tool to help with managing pubspec dependencies.
+version: 0.0.1-beta
+environment:
+  sdk: ^3.0.0
+
 # Add regular dependencies here.
 dependencies:
-  sticky_grouped_list:
-    git:
-      url: ssh://git@github.com/abc/sticky_grouped_list.git
-      ref: develop
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
-  olm:
-    git:
-      url: ssh://git@github.com/abc/olm.git
-      ref: develop
+  lints: ^2.1.1
+  test: ^1.24.3
+
+flutter:
+  uses-material-design: true
+  generate: true
