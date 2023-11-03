@@ -27,8 +27,7 @@ class Configuration {
     dynamic pubspec = await _getPubspec();
     dynamic yaml = pubspec['pubm_config'] ?? YamlMap();
 
-    final String? buildArgsConfig =
-        (_args['build-args'] ?? yaml['build_args'])?.toString();
+    final String? buildArgsConfig = (_args['build-args'] ?? yaml['build_args'])?.toString();
     if (buildArgsConfig != null && buildArgsConfig.isNotEmpty) {
       CommandLineConverter commandLineConverter = CommandLineConverter();
       buildArgs = commandLineConverter.convert(buildArgsConfig);
@@ -41,15 +40,13 @@ class Configuration {
 
     if (_args['help']) {
       _logger.stdout('Usage: pubm -f <flavor>');
-      _logger.stdout(
-          'Usage: pubm -f <flavor> -v (verbose) to enable verbose mode');
-      _logger.stdout(
-          'Usage: pubm -h to get the list of available commands and how to use');
+      _logger.stdout('Usage: pubm -f <flavor> -v (verbose) to enable verbose mode');
+      _logger.stdout('Usage: pubm -h to get the list of available commands and how to use');
 
       return false;
     }
 
-    flavor = _args['flavor']?.toString() ?? '';
+    flavor = _args['flavor']?.toString() ?? 'test';
     if (flavor.isEmpty) {
       exitCode = 2;
       _logger.stderr('Usage: dart manage.dart -f <flavor>'.red);
@@ -72,8 +69,7 @@ class Configuration {
     _logger.trace('parsing cli arguments');
 
     ArgParser parser = ArgParser()
-      ..addOption('flavor',
-          abbr: 'f', help: 'flavor of YAML file (pubspec_/flavor/.yaml)')
+      ..addOption('flavor', abbr: 'f', help: 'flavor of YAML file (pubspec_/flavor/.yaml)')
       ..addOption('build-args')
       ..addFlag('help', negatable: false, abbr: 'h');
 
