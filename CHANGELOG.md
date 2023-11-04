@@ -1,3 +1,7 @@
+### 0.2.0 (2023-11-04)
+#### Added
+- Added support to remove values from pubspec.yaml file.
+
 ### 0.1.1 (2023-09-19)
 #### Fixed
 - Deep check for other dependencies  to avoid changes to pubspec.yaml file if the dependencies are same.

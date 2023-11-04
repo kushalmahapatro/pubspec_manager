@@ -45,12 +45,12 @@ class Pubspec extends Equatable {
     return {
       if (name != null) 'name': name,
       if (description != null) 'description': description,
+      if (version != null) 'version': version,
       if (homepage != null) 'homepage': homepage,
       if (repository != null) 'repository': repository,
       if (issueTracker != null) 'issue_tracker': issueTracker,
       if (documentation != null) 'documentation': documentation,
       if (publishTo != null) 'publish_to': publishTo,
-      if (version != null) 'version': version,
       if (environment != null) 'environment': environment?.toMap(),
       if (dependencies != null)
         'dependencies': dependencies?.toMap(addComments: addComments),
@@ -185,34 +185,34 @@ class Dependencies extends Equatable {
     List<Map<String, dynamic>> finalList = [];
     if (gitDependencies != null && gitDependencies!.isNotEmpty) {
       if (addComments) {
-        finalList.add({'${Constants.comment}1': 'git related dependencies'});
+        finalList.add({'${comment}1': 'git related dependencies'});
       }
       finalList += gitDependencies!.map((x) => x.toMap()).toList();
     }
 
     if (pathDependencies != null && pathDependencies!.isNotEmpty) {
       if (addComments) {
-        finalList.add({'${Constants.comment}2': 'path related dependencies'});
+        finalList.add({'${comment}2': 'path related dependencies'});
       }
       finalList += pathDependencies!.map((x) => x.toMap()).toList();
     }
     if (normalDependencies != null && normalDependencies!.isNotEmpty) {
       if (addComments) {
-        finalList.add({'${Constants.comment}3': 'normal dependencies'});
+        finalList.add({'${comment}3': 'normal dependencies'});
       }
       finalList += normalDependencies!.map((x) => x.toMap()).toList();
     }
 
     if (hostedDependencies != null && hostedDependencies!.isNotEmpty) {
       if (addComments) {
-        finalList.add({'${Constants.comment}4': 'hosted dependencies'});
+        finalList.add({'${comment}4': 'hosted dependencies'});
       }
       finalList += hostedDependencies!.map((x) => x.toMap()).toList();
     }
 
     if (sdkDependencies != null && sdkDependencies!.isNotEmpty) {
       if (addComments) {
-        finalList.add({'${Constants.comment}5': 'sdk dependencies'});
+        finalList.add({'${comment}5': 'sdk dependencies'});
       }
       finalList += sdkDependencies!.map((x) => x.toMap()).toList();
     }

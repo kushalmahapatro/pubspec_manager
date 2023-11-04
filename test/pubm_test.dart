@@ -1,54 +1,42 @@
 import 'dart:io';
 
-import 'package:cli_util/cli_logging.dart';
-import 'package:get_it/get_it.dart';
 import 'package:path/path.dart' as p;
 import 'package:pubm/models/pubspec.dart';
 import 'package:pubm/src/configuration.dart';
 import 'package:pubm/src/helpers/pubspec_checker.dart';
-import 'package:pubm/src/pubspec_manage.dart';
 import 'package:test/test.dart';
 import 'package:yaml/yaml.dart';
 
+import 'helper.dart';
+import 'mock_pubspec_manager.dart';
 import 'test_constants.dart';
+import 'yaml_check.dart';
 
 const String flavor = 'test';
 var tempFolderPath = p.join('test', 'configuration_temp');
 var pubspecPath = p.join(tempFolderPath, 'pubspec.yaml');
 var pubspecFlavorPath = p.join(tempFolderPath, 'pubspec_$flavor.yaml');
 var backupPubspecFlavorPath = p.join(tempFolderPath, 'backup_pubspec.yaml');
+late Configuration config;
+late MockPubspecManager testClass;
+late YamlTest yamlTest;
 
 void main() {
-  late Configuration config;
-  late TestClass testClass;
   const flavorYamlContent = '''
-
-name: testAppName_flavor
-
-  ''';
+    name: testAppName_flavor
+    ''';
 
   setUp(() async {
-    GetIt.I.registerSingleton<Logger>(Logger.verbose());
-
-    config = Configuration(['-f', 'test'])
-      ..pubspecFile = File(pubspecPath)
-      ..pubspecFlavorFile = File(pubspecFlavorPath)
-      ..backupPubspecFile = File(backupPubspecFlavorPath)
-      ..flavor = 'test';
-
-    GetIt.I.registerSingleton<Configuration>(config);
-
-    await Directory(tempFolderPath).create(recursive: true);
-    testClass = TestClass();
+    config = await testSetUp();
+    testClass = MockPubspecManager();
+    yamlTest = YamlTest(
+      yamlContent,
+      flavorYamlContent,
+      config,
+    );
   });
 
-  tearDown(() async {
-    GetIt.I.reset();
-
-    if (await Directory(tempFolderPath).exists()) {
-      await Directory(tempFolderPath).delete(recursive: true);
-    }
-  });
+  tearDown(() => tearDownSetup());
 
   group('config check:', () {
     test('should return false if help is passed', () async {
@@ -78,136 +66,52 @@ name: testAppName_flavor
       expect(config.pubspecFlavorFile.existsSync(), true);
     });
 
-    test('check if yaml(s) are same or not', () async {
-      await File(pubspecPath).writeAsString(yamlContent);
-      await File(pubspecFlavorPath).writeAsString(flavorYamlContent);
+    test(
+      'Check if yaml are same or not',
+      () => yamlTest.checkSameYaml(),
+    );
 
-      final result = PubspecChecker.checkIfPubspecAlreadyMerged(
-        actualPubspec:
-            Pubspec.fromMap(loadYaml(config.pubspecFile.readAsStringSync())),
-        flavorPubspec: Pubspec.fromMap(
-            loadYaml(config.pubspecFlavorFile.readAsStringSync())),
-      );
+    test(
+      'flavor yaml with existing dependency',
+      () => yamlTest.checkExistingDependencies(),
+    );
 
-      expect(result, false);
-
-      const content = '''
-
-name: pubm
-
-  ''';
-
-      await File(pubspecFlavorPath).writeAsString(content);
-      final result1 = PubspecChecker.checkIfPubspecAlreadyMerged(
-        actualPubspec:
-            Pubspec.fromMap(loadYaml(config.pubspecFile.readAsStringSync())),
-        flavorPubspec: Pubspec.fromMap(
-            loadYaml(config.pubspecFlavorFile.readAsStringSync())),
-      );
-
-      expect(result1, true);
-    });
-
-    test('flavor yaml with existing dependency', () async {
-      const content2 = '''
-
-name: pubm
-
-dependencies:
-  path_test2: 
-   path: abc/xyz/2
-
-  ''';
-      await File(pubspecPath).writeAsString(yamlContent);
-      await File(pubspecFlavorPath).writeAsString(content2);
-      final result2 = PubspecChecker.checkIfPubspecAlreadyMerged(
-        actualPubspec:
-            Pubspec.fromMap(loadYaml(config.pubspecFile.readAsStringSync())),
-        flavorPubspec: Pubspec.fromMap(
-            loadYaml(config.pubspecFlavorFile.readAsStringSync())),
-      );
-
-      expect(result2, true);
-    });
-
-    test('flavor yaml with same fonts', () async {
-      const content2 = '''
-
-name: pubm
-
-dependencies:
-  path_test2: 
-   path: abc/xyz/2
-
-flutter:
-  fonts:
-    - family: test
-      fonts:
-        - asset: a/a/700.ttf
-          weight: 700
-        - asset: a/a/600.ttf
-          weight: 600
-        - asset: a/a/500.ttf
-          weight: 500
-        - asset: a/a/400.ttf
-          weight: 400
-    - family: test2
-      fonts:
-        - asset: a/b/700.ttf
-          weight: 700
-        - asset: a/b/600.ttf
-          weight: 600
-        - asset: a/b/500.ttf
-          weight: 500
-        - asset: a/b/400.ttf
-          weight: 400
-
-  ''';
-      await File(pubspecPath).writeAsString(yamlContent);
-      await File(pubspecFlavorPath).writeAsString(content2);
-      final result2 = PubspecChecker.checkIfPubspecAlreadyMerged(
-        actualPubspec:
-            Pubspec.fromMap(loadYaml(config.pubspecFile.readAsStringSync())),
-        flavorPubspec: Pubspec.fromMap(
-            loadYaml(config.pubspecFlavorFile.readAsStringSync())),
-      );
-
-      expect(result2, true);
-    });
+    test(
+      'flavor yaml with same fonts',
+      () => yamlTest.sameFontsCheck(),
+    );
 
     test('flavor yaml with new fonts', () async {
       const content2 = '''
-
-name: pubm
-
-dependencies:
-  path_test2: 
-   path: abc/xyz/2
-
-flutter:
-  fonts:
-    - family: test
-      fonts:
-        - asset: b/a/700.ttf
-          weight: 700
-        - asset: b/a/600.ttf
-          weight: 600
-        - asset: b/a/500.ttf
-          weight: 500
-        - asset: b/a/400.ttf
-          weight: 400
-    - family: test2
-      fonts:
-        - asset: b/b/700.ttf
-          weight: 700
-        - asset: b/b/600.ttf
-          weight: 600
-        - asset: b/b/500.ttf
-          weight: 500
-        - asset: b/b/400.ttf
-          weight: 400
-
-  ''';
+        name: pubm
+        
+        dependencies:
+          path_test2: 
+           path: abc/xyz/2
+        
+        flutter:
+          fonts:
+            - family: test
+              fonts:
+                - asset: b/a/700.ttf
+                  weight: 700
+                - asset: b/a/600.ttf
+                  weight: 600
+                - asset: b/a/500.ttf
+                  weight: 500
+                - asset: b/a/400.ttf
+                  weight: 400
+            - family: test2
+              fonts:
+                - asset: b/b/700.ttf
+                  weight: 700
+                - asset: b/b/600.ttf
+                  weight: 600
+                - asset: b/b/500.ttf
+                  weight: 500
+                - asset: b/b/400.ttf
+                  weight: 400
+          ''';
       await File(pubspecPath).writeAsString(yamlContent);
       await File(pubspecFlavorPath).writeAsString(content2);
       final result2 = PubspecChecker.checkIfPubspecAlreadyMerged(
@@ -222,55 +126,53 @@ flutter:
 
     test('merge flavor pubspec to pubspec', () async {
       const content2 = '''
-
-name: pubm_merge
-version: 0.0.1
-
-dependencies:
-  path_test2: 
-   path: abc/def/2
-  a: 1.0.0
-  b: 
-    git:
-      url: git://github.com/flutter/packages.git
-      ref: 1.0.0
-  c: 
-   sdk: flutter
-  e:
-    hosted: https://some-package-server.com
-    version: ^1.0.0
-  f:
-    hosted: 
-      name: some-package
-      url: https://some-package-server.com
-    version: ^1.0.0
-
-flutter:
-  fonts:
-    - family: test
-      fonts:
-        - asset: b/a/700.ttf
-          weight: 700
-        - asset: b/a/600.ttf
-          weight: 600
-        - asset: b/a/500.ttf
-          weight: 500
-        - asset: b/a/400.ttf
-          weight: 400
-    - family: test2
-      fonts:
-        - asset: b/b/700.ttf
-          weight: 700
-        - asset: b/b/600.ttf
-          weight: 600
-        - asset: b/b/500.ttf
-          weight: 500
-        - asset: b/b/400.ttf
-          weight: 400
-        - asset: b/b/300.ttf
-          weight: 300
-
-  ''';
+        name: pubm_merge
+        version: 0.0.1
+        
+        dependencies:
+          path_test2: 
+           path: abc/def/2
+          a: 1.0.0
+          b: 
+            git:
+              url: git://github.com/flutter/packages.git
+              ref: 1.0.0
+          c: 
+           sdk: flutter
+          e:
+            hosted: https://some-package-server.com
+            version: ^1.0.0
+          f:
+            hosted: 
+              name: some-package
+              url: https://some-package-server.com
+            version: ^1.0.0
+        
+        flutter:
+          fonts:
+            - family: test
+              fonts:
+                - asset: b/a/700.ttf
+                  weight: 700
+                - asset: b/a/600.ttf
+                  weight: 600
+                - asset: b/a/500.ttf
+                  weight: 500
+                - asset: b/a/400.ttf
+                  weight: 400
+            - family: test2
+              fonts:
+                - asset: b/b/700.ttf
+                  weight: 700
+                - asset: b/b/600.ttf
+                  weight: 600
+                - asset: b/b/500.ttf
+                  weight: 500
+                - asset: b/b/400.ttf
+                  weight: 400
+                - asset: b/b/300.ttf
+                  weight: 300
+        ''';
       await File(pubspecPath).writeAsString(yamlContent);
       await File(pubspecFlavorPath).writeAsString(content2);
       await testClass.mergePubspec();
@@ -287,12 +189,11 @@ flutter:
     test('merge flavor pubspec to pubspec with git dependency with url',
         () async {
       const content2 = '''
-
-dependencies:
-  b: 
-    git:
-      url: git://github.com/flutter/packages.git
-  ''';
+        dependencies:
+          b: 
+            git:
+              url: git://github.com/flutter/packages.git
+          ''';
       await File(pubspecPath).writeAsString(yamlContent);
       await File(pubspecFlavorPath).writeAsString(content2);
       await testClass.mergePubspec();
@@ -305,53 +206,30 @@ dependencies:
 
       expect(result2, true);
     });
-    test('merge flavor pubspec to pubspec with other dependencies', () async {
-      const content2 = '''
-msix_config:
-  display_name: Flutter App
-  publisher_display_name: Company Name
-  identity_name: company.suite.flutterapp
-  msix_version: 1.0.0.0
-  logo_path: C:\\path\\to\\logo.png
-  capabilities: internetClient, location, microphone, webcam
-  
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/icon/icon.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
-  web:
-    generate: true
-    image_path: "path/to/image.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
-  windows:
-    generate: true
-    image_path: "path/to/image.png"
-    icon_size: 48 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "path/to/image.png"
-  ''';
-      await File(pubspecPath).writeAsString(yamlContent);
-      await File(pubspecFlavorPath).writeAsString(content2);
-      await testClass.mergePubspec();
-      final result2 = PubspecChecker.checkIfPubspecAlreadyMerged(
-        actualPubspec:
-            Pubspec.fromMap(loadYaml(config.pubspecFile.readAsStringSync())),
-        flavorPubspec: Pubspec.fromMap(
-            loadYaml(config.pubspecFlavorFile.readAsStringSync())),
-      );
 
-      expect(result2, true);
-    });
+    test(
+      'merge flavor pubspec to pubspec with other dependencies',
+      () => yamlTest.otherDependenciesCheck(),
+    );
+
+    test(
+      'remove name',
+      () => yamlTest.removeName(),
+    );
+
+    test(
+      'remove dependencies',
+      () => yamlTest.removeDependency(),
+    );
+
+    test(
+      'remove flutter values',
+      () => yamlTest.removeFlutterValues(),
+    );
+
+    test(
+      'remove other values',
+      () => yamlTest.removeOtherValues(),
+    );
   });
-}
-
-class TestClass with PubspecManager {
-  @override
-  Configuration get config => GetIt.I<Configuration>();
-
-  @override
-  Logger get logger => GetIt.I<Logger>();
 }
