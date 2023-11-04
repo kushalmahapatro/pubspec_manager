@@ -30,9 +30,8 @@ class Pubm with PubspecManager {
 
 /// Register [Logger] and [Configuration] as singleton services
 void _setupSingletonServices(List<String> args) {
-  GetIt.I.registerSingleton<Logger>(args.contains('-v')
-      ? Logger.verbose()
-      : Logger.standard(ansi: Ansi(true)));
+  GetIt.I.registerSingleton<Logger>(
+      args.contains('-v') ? Logger.verbose() : Logger.standard(ansi: Ansi(true)));
 
   GetIt.I.registerSingleton<Configuration>(Configuration(args));
 }
