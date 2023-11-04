@@ -1,0 +1,40 @@
+description: prod version of pubspec.yaml
+version: 0.0.1-prod
+homepage: https://prod.homepage
+
+dependencies:
+  example_dependency:
+    path: example/dependency
+
+dev_dependencies:
+  lints: ^2.1.1
+
+flutter:
+  fonts:
+    - family: font
+      fonts:
+        - asset: prod/font2/700.ttf
+          weight: 700
+        - asset: prod/font2/600.ttf
+          weight: 600
+        - asset: prod/font2/500.ttf
+          weight: 500
+        - asset: prod/font2/400.ttf
+          weight: 400
+
+remove:
+  dependencies:
+    unwanted_dependency:
+
+  dev_dependencies:
+    dependency_overrides:
+
+  dependency_overrides:
+    unwanted_dependency: ^0.0.1-override
+
+  flutter:
+    assets:
+      - assets/dev/
+
+    fonts:
+      - family: font1

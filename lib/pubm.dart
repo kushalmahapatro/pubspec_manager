@@ -1,7 +1,7 @@
 import 'package:cli_util/cli_logging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pubm/src/configuration.dart';
-import 'package:pubm/src/pubspec_manage.dart';
+import 'package:pubm/src/manage/pubspec_manage.dart';
 
 class Pubm with PubspecManager {
   Pubm(List<String> args) {
@@ -30,8 +30,9 @@ class Pubm with PubspecManager {
 
 /// Register [Logger] and [Configuration] as singleton services
 void _setupSingletonServices(List<String> args) {
-  GetIt.I.registerSingleton<Logger>(
-      args.contains('-v') ? Logger.verbose() : Logger.standard(ansi: Ansi(true)));
+  GetIt.I.registerSingleton<Logger>(args.contains('-v')
+      ? Logger.verbose()
+      : Logger.standard(ansi: Ansi(true)));
 
   GetIt.I.registerSingleton<Configuration>(Configuration(args));
 }

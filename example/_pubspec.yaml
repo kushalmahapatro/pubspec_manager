@@ -1,0 +1,49 @@
+name: pubm
+description: Actual description
+version: 0.0.1
+homepage: https://test.homepage
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  cupertino_icons: ^1.0.2
+  unwanted_dependency: ^0.0.1
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  unwanted_dependency: ^0.0.1-dev
+
+dependency_overrides:
+  flutter_lints: ^1.0.0
+  unwanted_dependency: ^0.0.1-override
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/dev/
+    - assets/prod/
+
+  fonts:
+    - family: font1
+      fonts:
+        - asset: actual/font1/700.ttf
+          weight: 700
+        - asset: actual/font1/600.ttf
+          weight: 600
+        - asset: actual/font1/500.ttf
+          weight: 500
+        - asset: actual/font1/400.ttf
+          weight: 400
+    - family: font
+      fonts:
+        - asset: actual/font2/700.ttf
+          weight: 700
+        - asset: actual/font2/600.ttf
+          weight: 600
+        - asset: actual/font2/500.ttf
+          weight: 500
+        - asset: actual/font2/400.ttf
+          weight: 400

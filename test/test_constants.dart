@@ -1,5 +1,4 @@
 const yamlContent = '''
-
 $name
 $description
 $version
@@ -8,30 +7,23 @@ $dependencyContent
 $devDependencies
 $dependencyOverride
 $flutterContent
+$otherContent
   ''';
 
-const name = '''
-name: pubm
-  ''';
+const name = 'name: pubm';
 
-const description = '''
-description: A command-line application to manage pubspec dependencies.
-  ''';
+const description =
+    'description: A command-line application to manage pubspec dependencies.';
 
-const version = '''
-version: 1.0.0
-  ''';
+const version = 'version: 1.0.0';
 
 const environmentContent = '''
-
 environment:
   sdk: '>=3.0.0 <4.0.0'
   flutter: '3.10.0'
- 
   ''';
 
 const dependencyContent = '''
-
 dependencies:
   flutter:
     sdk: flutter
@@ -53,11 +45,9 @@ dependencies:
       path: path2
   args: ^2.4.2
   cupertino_icons: ^1.0.2
-
   ''';
 
 const devDependencies = '''
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -70,26 +60,26 @@ dev_dependencies:
       path: path_dev
   test: any
   lints: ^2.1.1
-  
   ''';
 
 const dependencyOverride = '''
- 
 dependency_overrides:
   git_test_override:
     git:
       url: https://github.com/aa/override.git
       ref: 00000000000000override
       path: path_override
-
-
   ''';
 
 const flutterContent = '''
-
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/my_icon.png
+    - assets/background.png
+    - directory/
+    - directory/subdirectory/
   
   fonts:
     - family: test
@@ -112,5 +102,14 @@ flutter:
           weight: 500
         - asset: a/b/400.ttf
           weight: 400
-
   ''';
+
+const otherContent = '''
+msix_config:
+  display_name: Flutter App
+  publisher_display_name: Company Name
+  identity_name: company.suite.flutterapp
+  msix_version: 1.0.0.0
+  logo_path: C:\\path\\to\\logo.png
+  capabilities: internetClient, location, microphone, webcam
+''';
