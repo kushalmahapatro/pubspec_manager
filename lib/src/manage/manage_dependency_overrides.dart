@@ -9,8 +9,9 @@ void checkAndUpdateDependencyOverrides(
   Pubspec flavorPubspec,
   Map<String, dynamic> finalMap,
   Map<String, dynamic> map,
-  Logger logger,
-) {
+  Logger logger, {
+  bool isPubspecOverrides = false,
+}) {
   var dependencyOverrideCheck = PubspecChecker.checkDependencyOverride(
     actualPubspec,
     flavorPubspec,
@@ -20,13 +21,17 @@ void checkAndUpdateDependencyOverrides(
   if (!dependencyOverrideCheck.hasMatch) {
     if (dependencyOverrideCheck.update.isNotEmpty) {
       for (var element in dependencyOverrideCheck.update) {
-        logger.trace('Updating dependency_override $element');
+        logger.trace(
+          'Updating dependency_override $element ${isPubspecOverrides ? 'in pubspec_overrides.yaml' : 'in pubspec.yaml'}',
+        );
       }
     }
 
     if (dependencyOverrideCheck.addition.isNotEmpty) {
       for (var element in dependencyOverrideCheck.addition) {
-        logger.trace('Adding dependency_override $element');
+        logger.trace(
+          'Adding dependency_override $element ${isPubspecOverrides ? 'in pubspec_overrides.yaml' : 'in pubspec.yaml'}',
+        );
       }
     }
 

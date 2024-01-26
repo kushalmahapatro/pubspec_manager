@@ -1,0 +1,7 @@
+  remove:
+    flutter:
+      fonts:
+        - family: test
+      assets:
+        - assets/my_icon.png
+    

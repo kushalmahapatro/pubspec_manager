@@ -34,7 +34,7 @@ remove:
 
   flutter:
     assets:
-      - assets/dev/
+      - assets/prod/
 
     fonts:
       - family: font1

@@ -13,7 +13,10 @@ Future<Configuration> testSetUp() async {
     ..pubspecFile = File(pubspecPath)
     ..pubspecFlavorFile = File(pubspecFlavorPath)
     ..backupPubspecFile = File(backupPubspecFlavorPath)
-    ..flavor = 'test';
+    ..backupPubspecOverridesFile = File(backupPubspecOverridesPath)
+    ..pubspecOverridesFile = File(pubspecOverridePath)
+    ..flavor = 'test'
+    ..pubGetAfterDone = false;
 
   GetIt.I.registerSingleton<Configuration>(config);
 
@@ -25,6 +28,6 @@ Future<void> tearDownSetup() async {
   GetIt.I.reset();
 
   if (await Directory(tempFolderPath).exists()) {
-    await Directory(tempFolderPath).delete(recursive: true);
+    // await Directory(tempFolderPath).delete(recursive: true);
   }
 }

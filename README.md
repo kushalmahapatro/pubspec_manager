@@ -39,6 +39,21 @@ pubm -f <flavor> -v
 # else
 dart run pubm:manage -f <flavor> -v
 ```
+
+Once the pubspec is managed, this run the pub get command, if the pubspec.yaml file contains flutter sdk dependency then it will run flutter pub get else dart pub get.
+To stop calling pub get after managing the pubspec.yaml file, use the -b flag with no-pub-get value.
+-b (--build-args)
+```console  
+# if activated from https://pub.dev
+pubm -f <flavor> -b no-pub-get -v
+
+# else
+dart run pubm:manage -f <flavor> -b no-pub-get -v
+```
+
+Pubm also supports managing the overridden dependencies in `pubspec_overrides.yaml` file.
+
+
 ### 📋 Example: pubspec_dev.yaml
 Here's an example of a flavor-specific pubspec.yaml file for a 'dev' flavor:
 ```yaml
