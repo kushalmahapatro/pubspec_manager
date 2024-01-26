@@ -10,20 +10,24 @@ import 'package:yaml/yaml.dart';
 
 /// Handles loading and validating the configuration values
 class Configuration {
-  final List<String> _arguments;
   Configuration(this._arguments);
-
+  final List<String> _arguments;
   final Logger _logger = GetIt.I<Logger>();
-  late ArgResults _args;
-  List<String>? buildArgs;
-  String flavor = '';
+
   File backupPubspecFile = File('backup_$pubspecYamlPath');
+  File backupPubspecOverridesFile = File('backup_$pubspecOverridesYamlPath');
   File pubspecFile = File(pubspecYamlPath);
+  File pubspecOverridesFile = File(pubspecOverridesYamlPath);
+
+  String flavor = '';
   File pubspecFlavorFile = File('');
+  List<String>? buildArgs;
+  ArgResults _args = ArgParser().parse([]);
+  bool pubGetAfterDone = true;
 
   /// Gets the configuration values from from [_arguments] or pubspec.yaml file
   Future<void> getConfigValues() async {
-    _parseCliArguments(_arguments);
+    _args = _parseCliArguments(_arguments);
     dynamic pubspec = await _getPubspec();
     dynamic yaml = pubspec['pubm_config'] ?? YamlMap();
 
@@ -32,6 +36,9 @@ class Configuration {
     if (buildArgsConfig != null && buildArgsConfig.isNotEmpty) {
       CommandLineConverter commandLineConverter = CommandLineConverter();
       buildArgs = commandLineConverter.convert(buildArgsConfig);
+      if (buildArgs?.contains('no-pub-get') ?? false) {
+        pubGetAfterDone = false;
+      }
     }
   }
 
@@ -42,7 +49,9 @@ class Configuration {
     if (_args['help']) {
       _logger.stdout('Usage: pubm -f <flavor>');
       _logger.stdout(
-          'Usage: pubm -f <flavor> -v (verbose) to enable verbose mode');
+          'Usage: pubm --flavor/-f <flavor> --verbose/-v (verbose) to enable verbose mode');
+      _logger.stdout(
+          'Usage: pubm --flavor/-f <flavor> --build-args/-b <no-pub-get> --verbose/-v to build without running pub get and enable verbose mode');
       _logger.stdout(
           'Usage: pubm -h to get the list of available commands and how to use');
 
@@ -68,16 +77,16 @@ class Configuration {
   }
 
   /// Declare and parse the cli arguments
-  void _parseCliArguments(List<String> args) {
+  ArgResults _parseCliArguments(List<String> args) {
     _logger.trace('parsing cli arguments');
 
     ArgParser parser = ArgParser()
       ..addOption('flavor',
           abbr: 'f', help: 'flavor of YAML file (pubspec_/flavor/.yaml)')
-      ..addOption('build-args')
+      ..addOption('build-args', abbr: 'b', help: 'build arguments')
       ..addFlag('help', negatable: false, abbr: 'h');
 
     // exclude -v (verbose) from the arguments
-    _args = parser.parse(args.where((arg) => arg != '-v'));
+    return parser.parse(args.where((arg) => arg != '-v'));
   }
 }

@@ -34,14 +34,18 @@ class FlutterBuild {
     loggerProgress.finish(showTiming: true);
   }
 
-  Future<void> pubGet() async {
+  Future<void> pubGet({required bool isFlutterProject}) async {
     var flutterPath = await _getFlutterPath();
+    var dartPath = await _getDartPath();
 
-    final Progress loggerProgress =
-        _logger.progress('running "flutter pub get"');
+    final Progress loggerProgress = _logger
+        .progress('running "${isFlutterProject ? 'flutter' : 'dart'} pub get"');
 
-    final ProcessResult pubGetProgress =
-        await Process.run(flutterPath, ['pub', 'get'], runInShell: true);
+    final ProcessResult pubGetProgress = await Process.run(
+      isFlutterProject ? flutterPath : dartPath,
+      ['pub', 'get'],
+      runInShell: true,
+    );
 
     pubGetProgress.exitOnError();
 
@@ -70,4 +74,14 @@ Future<String> _getFlutterPath() async {
   }
 
   return flutterPath;
+}
+
+Future<String> _getDartPath() async {
+  // e.g. C:\Users\MyUser\fvm\versions\3.10.5\bin\cache\dart-sdk\bin\dart
+  final dartPath = p.split(Platform.executable);
+
+  // e.g. C:\Users\MyUser\fvm\versions\3.10.5\bin\flutter
+  final dartRelativePath = p.joinAll(dartPath);
+
+  return dartRelativePath;
 }

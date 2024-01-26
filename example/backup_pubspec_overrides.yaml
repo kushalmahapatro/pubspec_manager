@@ -1,0 +1,5 @@
+
+dependency_overrides:
+  # normal dependencies
+  flutter_lints: ^9.0.0
+  unwanted_dependency: ^0.0.1-override

@@ -1,5 +1,6 @@
 const String comment = "Pubspec Manager Comment";
 const String pubspecYamlPath = "pubspec.yaml";
+const String pubspecOverridesYamlPath = "pubspec_overrides.yaml";
 
 /// Pubspec keys
 const String name = 'name';

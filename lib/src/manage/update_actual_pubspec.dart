@@ -4,17 +4,17 @@ import 'package:pubm/constants.dart';
 import 'package:pubm/models/pubspec.dart';
 import 'package:pubm/src/configuration.dart';
 import 'package:pubm/src/extensions.dart';
-import 'package:pubm/src/flutter_build.dart';
 
-Future<void> updateActualPubspec(
-  Map<String, dynamic> finalMap,
-  bool nameChanged,
-  Pubspec actualPubspec,
-  Pubspec flavorPubspec,
-  Configuration config,
-  Logger logger,
-) async {
-  final finalPubspec = Pubspec.fromMap(finalMap);
+Future<void> updateActualPubspecFiles({
+  required Map<String, dynamic> finalPubspecMap,
+  required Pubspec actualPubspec,
+  required Pubspec flavorPubspec,
+  required Configuration config,
+  required Logger logger,
+  bool nameChanged = false,
+  bool isForPubspecOverrides = false,
+}) async {
+  final finalPubspec = Pubspec.fromMap(finalPubspecMap);
 
   /// Convert the `finalMap` to String with pubspec.yaml format
   final String string = json2yaml(
@@ -36,13 +36,28 @@ Future<void> updateActualPubspec(
     return '# ${m.group(1)}';
   });
 
-  /// Save the updated YAML to the file
-  logger.trace('Creating a backup of pubspec.yaml to backup_pubspec.yaml');
-  config.backupPubspecFile
-      .writeAsStringSync(config.pubspecFile.readAsStringSync());
-  config.pubspecFile.writeAsStringSync(replacedText);
+  if (isForPubspecOverrides) {
+    /// Save the updated YAML to the file
+    logger.trace(
+        'Creating a backup of pubspec_overrides.yaml to backup_pubspec_overrides.yaml'
+            .emphasized);
+    config.backupPubspecOverridesFile
+        .writeAsStringSync(config.pubspecOverridesFile.readAsStringSync());
 
-  logger.stdout('Merging of pubspec.yaml files completed successfully'.green);
+    /// Write the string format of pubspec_overrides.yaml to file (pubspec_overrides.yaml)
+    config.pubspecOverridesFile.writeAsStringSync(replacedText);
+    logger.stdout(
+        'Merging of pubspec_overrides.yaml files completed successfully'.green);
+  } else {
+    /// Save the updated YAML to the file
+    logger.trace('Creating a backup of pubspec.yaml to backup_pubspec.yaml');
+    config.backupPubspecFile
+        .writeAsStringSync(config.pubspecFile.readAsStringSync());
+
+    /// Write the string format of pubspec.yaml to file (pubspec.yaml)
+    config.pubspecFile.writeAsStringSync(replacedText);
+    logger.stdout('Merging of pubspec.yaml files completed successfully'.green);
+  }
 
   /// Error message when name is changed in the main pubspec.yaml from the flavor pubspec.yaml
   if (nameChanged) {
@@ -54,6 +69,4 @@ Future<void> updateActualPubspec(
     logger.stderr(
         "Refactor: import 'package:${actualPubspec.name}/ to import 'package:${flavorPubspec.name}/ ");
   }
-
-  await FlutterBuild().pubGet();
 }

@@ -1,15 +1,8 @@
 name: pubm
 description: A Dart command line tool to help with managing pubspec dependencies.
-version: 0.2.0
+version: 0.3.0+1
 repository: https://github.com/kushalmahapatro/pubspec_manager
-homepage:  https://github.com/kushalmahapatro/pubspec_manager
-topics:
-  - pubspec
-  - pubspec-manager
-  - pubspec-splitter
-  - pubspec-updater
-  - pubspec-dependency-manager
-
+homepage: https://github.com/kushalmahapatro/pubspec_manager
 
 environment:
   sdk: ^3.0.0
@@ -17,24 +10,26 @@ environment:
 dependencies:
   # normal dependencies
   args: ^2.4.2
-  cli_util: ^0.4.0
-  collection: ^1.17.1
+  cli_util: ^0.4.1
+  collection: ^1.18.0
   cupertino_icons: ^1.0.2
   equatable: ^2.0.5
-  get_it: ^7.2.0
+  get_it: ^7.6.7
   json2yaml: ^3.0.1
-  path: ^1.8.0
+  path: ^1.9.0
   yaml: ^3.1.2
 
 dev_dependencies:
   # normal dependencies
-  lints: ^2.1.1
-  test: ^1.24.3
+  lints: ^3.0.0
+  test: ^1.25.2
 
-
-flutter:
-  uses-material-design: true
-  generate: true
+topics:
+  - pubspec
+  - pubspec-manager
+  - pubspec-splitter
+  - pubspec-updater
+  - pubspec-dependency-manager
 
 executables:
   pubm: manage

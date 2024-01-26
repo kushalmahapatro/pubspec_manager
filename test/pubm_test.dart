@@ -9,6 +9,7 @@ import 'package:yaml/yaml.dart';
 
 import 'helper.dart';
 import 'mock_pubspec_manager.dart';
+import 'overrides_yaml_check.dart';
 import 'test_constants.dart';
 import 'yaml_check.dart';
 
@@ -17,9 +18,14 @@ var tempFolderPath = p.join('test', 'configuration_temp');
 var pubspecPath = p.join(tempFolderPath, 'pubspec.yaml');
 var pubspecFlavorPath = p.join(tempFolderPath, 'pubspec_$flavor.yaml');
 var backupPubspecFlavorPath = p.join(tempFolderPath, 'backup_pubspec.yaml');
+var pubspecOverridePath = p.join(tempFolderPath, 'pubspec_overrides.yaml');
+var backupPubspecOverridesPath =
+    p.join(tempFolderPath, 'backup_pubspec_overrides.yaml');
+
 late Configuration config;
 late MockPubspecManager testClass;
 late YamlTest yamlTest;
+late OverridesYamlTest overridesYamlTest;
 
 void main() {
   const flavorYamlContent = '''
@@ -30,6 +36,12 @@ void main() {
     config = await testSetUp();
     testClass = MockPubspecManager();
     yamlTest = YamlTest(
+      yamlContent,
+      flavorYamlContent,
+      config,
+    );
+    overridesYamlTest = OverridesYamlTest(
+      overridesYamlContent,
       yamlContent,
       flavorYamlContent,
       config,
@@ -230,6 +242,11 @@ void main() {
     test(
       'remove other values',
       () => yamlTest.removeOtherValues(),
+    );
+
+    test(
+      'Merge pubspec and pubspec_overrides',
+      () => overridesYamlTest.mergeValues(),
     );
   });
 }

@@ -1,0 +1,84 @@
+name: pubm
+description: A command-line application to manage pubspec dependencies.
+version: 1.0.0
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: 3.10.0
+
+dependencies:
+  # git related dependencies
+  git_test:
+    git:
+      url: https://github.com/aa/aa.git
+      ref: 1232131231231dependency
+      path: path
+  git_test2:
+    git:
+      url: https://github.com/aa/aa2.git
+      ref: 00000000000000dependency
+      path: path2
+  # path related dependencies
+  path_test:
+    path: abc/xyz
+  path_test2:
+    path: abc/xyz/2
+  # normal dependencies
+  args: ^2.4.2
+  cupertino_icons: ^1.0.2
+  # sdk dependencies
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  # git related dependencies
+  git_test_dev:
+    git:
+      url: https://github.com/aa/dev.git
+      ref: 00000000000000dev
+      path: path_dev
+  # normal dependencies
+  lints: ^2.1.1
+  test: any
+  # sdk dependencies
+  flutter_driver:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+
+dependency_overrides:
+  # git related dependencies
+  git_test_override:
+    git:
+      url: https://github.com/aa/override.git
+      ref: 00000000000000override
+      path: path_override
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/background.png
+    - directory/
+    - directory/subdirectory/
+  generate: true
+  fonts:
+    - family: test2
+      fonts:
+        - asset: a/b/700.ttf
+          weight: 700
+        - asset: a/b/600.ttf
+          weight: 600
+        - asset: a/b/500.ttf
+          weight: 500
+        - asset: a/b/400.ttf
+          weight: 400
+
+msix_config:
+  display_name: Flutter App
+  publisher_display_name: Company Name
+  identity_name: company.suite.flutterapp
+  msix_version: 1.0.0.0
+  logo_path: C:\path\to\logo.png
+  capabilities: 'internetClient, location, microphone, webcam'

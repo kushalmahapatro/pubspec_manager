@@ -6,10 +6,14 @@ import 'package:pubm/constants.dart';
 /// Sort all the dependencies (dependencies, dev_dependencies, dependency_overrides)
 void sortAllDependencies(
   Map<String, dynamic> finalMap,
-  Logger logger,
-) {
+  Logger logger, {
+  bool isPubspecOverrides = false,
+}) {
   if (finalMap.containsKey(dependencies)) {
-    logger.trace('Sorting $dependencies');
+    logger.trace(
+      'Sorting $dependencies ${isPubspecOverrides ? 'in pubspec_overrides' : 'in pubspec.yaml'}',
+    );
+
     var sortedKeys = finalMap[dependencies].keys.toList(growable: false)
       ..sort((k1, k2) => k1.toString().compareTo(k2.toString()));
     LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,

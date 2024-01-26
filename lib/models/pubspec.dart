@@ -68,36 +68,36 @@ class Pubspec extends Equatable {
     Pubspec pubspec = Pubspec();
     Map<String, dynamic> others = {};
     map.forEach((key, value) {
-      if (key == 'name') {
+      if (key == 'name' && value != null) {
         pubspec = pubspec.copyWith(name: value);
-      } else if (key == 'description') {
+      } else if (key == 'description' && value != null) {
         pubspec = pubspec.copyWith(description: value);
-      } else if (key == 'version') {
+      } else if (key == 'version' && value != null) {
         pubspec = pubspec.copyWith(version: value);
-      } else if (key == 'homepage') {
+      } else if (key == 'homepage' && value != null) {
         pubspec = pubspec.copyWith(homepage: value);
-      } else if (key == 'repository') {
+      } else if (key == 'repository' && value != null) {
         pubspec = pubspec.copyWith(repository: value);
-      } else if (key == 'issue_tracker') {
+      } else if (key == 'issue_tracker' && value != null) {
         pubspec = pubspec.copyWith(issueTracker: value);
-      } else if (key == 'documentation') {
+      } else if (key == 'documentation' && value != null) {
         pubspec = pubspec.copyWith(documentation: value);
-      } else if (key == 'publish_to') {
+      } else if (key == 'publish_to' && value != null) {
         pubspec = pubspec.copyWith(publishTo: value);
-      } else if (key == 'environment') {
+      } else if (key == 'environment' && value != null) {
         pubspec = pubspec.copyWith(
             environment: Environment.fromMap(value.cast<String, dynamic>()));
-      } else if (key == 'dependencies') {
+      } else if (key == 'dependencies' && value != null) {
         pubspec = pubspec.copyWith(
             dependencies: getDependencies(value.cast<String, dynamic>()));
-      } else if (key == 'dev_dependencies') {
+      } else if (key == 'dev_dependencies' && value != null) {
         pubspec = pubspec.copyWith(
             devDependencies: getDependencies(value.cast<String, dynamic>()));
-      } else if (key == 'dependency_overrides') {
+      } else if (key == 'dependency_overrides' && value != null) {
         pubspec = pubspec.copyWith(
             dependenciesOverride:
                 getDependencies(value.cast<String, dynamic>()));
-      } else if (key == 'flutter') {
+      } else if (key == 'flutter' && value != null) {
         pubspec = pubspec.copyWith(
             flutter: FlutterData.fromMap(value.cast<String, dynamic>()));
       } else {

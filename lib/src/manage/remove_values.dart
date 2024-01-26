@@ -6,23 +6,29 @@ import 'package:pubm/src/configuration.dart';
 import 'package:pubm/src/extensions.dart';
 import 'package:yaml/yaml.dart';
 
+typedef RemovedPubspecsMap = ({
+  Map<String, dynamic>? pubspecMap,
+  Map<String, dynamic>? pubspecOverridesMap
+});
+
 /// Check if the pubspec_flavor.yaml file contains remove key
-bool checkIfItsOnlyRemove(dynamic data) {
-  return data is Map && data.containsKey("remove") && data.keys.length == 1;
+bool checkIfItsOnlyRemove(Map<String, dynamic> data) {
+  return data.containsKey("remove") && data.keys.length == 1;
 }
 
-bool checkIfItsContainsRemove(dynamic data) {
-  return data is Map && data.containsKey("remove");
+bool checkIfItsContainsRemove(Map<String, dynamic> data) {
+  return data.containsKey("remove");
 }
 
 /// Remove the values mentioned in the remove section of the pubspec_flavor.yaml
-Future<Map<String, dynamic>?> removeValuesFromPubspec({
+Future<RemovedPubspecsMap> removeValuesFromPubspec({
   required Logger logger,
   required Configuration config,
 }) async {
   if (!config.pubspecFlavorFile.existsSync()) {
     logger.stderr('File does not exist: ${config.flavor}'.red);
-    return null;
+
+    return (pubspecMap: null, pubspecOverridesMap: null);
   }
 
   // Read the YAML file
@@ -31,23 +37,34 @@ Future<Map<String, dynamic>?> removeValuesFromPubspec({
   // Parse the YAML contents
   final dynamic yamlMap = loadYaml(contents);
 
-  /// Check if the pubspec_flavor.yaml file contains remove key
-  if (!checkIfItsContainsRemove(yamlMap)) {
-    logger.stdout(
-      'No remove key found in pubspec_${config.flavor}.yaml'.emphasized,
-    );
-    return null;
-  }
-
   final dynamic actualYamlMap = loadYaml(config.pubspecFile.readAsStringSync());
+  final dynamic pubspecOverridesYamlMap =
+      config.pubspecOverridesFile.existsSync()
+          ? loadYaml(config.pubspecOverridesFile.readAsStringSync())
+          : null;
 
   // Create a Pubspec object
   final Pubspec actualPubspec = Pubspec.fromMap(actualYamlMap);
   final Pubspec flavorPubspec = Pubspec.fromMap(yamlMap[remove]);
+  final Pubspec? pubspecOverridesPubspec = pubspecOverridesYamlMap != null
+      ? Pubspec.fromMap(pubspecOverridesYamlMap)
+      : null;
 
   // Update the Pubspec object
   final Map<String, dynamic> finalMap = actualPubspec.toMap();
   final Map<String, dynamic> map = flavorPubspec.toMap();
+  final Map<String, dynamic>? pubspecOverridesMap =
+      pubspecOverridesPubspec?.toMap();
+
+  /// Check if the pubspec_flavor.yaml file contains remove key
+  if (yamlMap is! Map ||
+      !checkIfItsContainsRemove(yamlMap.cast<String, dynamic>())) {
+    logger.stdout(
+      'No remove key found in pubspec_${config.flavor}.yaml'.emphasized,
+    );
+
+    return (pubspecMap: finalMap, pubspecOverridesMap: pubspecOverridesMap);
+  }
 
   //Remove name if name exists in flavor
   if (map.containsKey(name)) {
@@ -59,62 +76,63 @@ Future<Map<String, dynamic>?> removeValuesFromPubspec({
 
   ///Remove description if description exists in flavor
   if (map.containsKey(description)) {
-    logger.trace('Removing $description');
+    logger.trace('Removing:0-7654` $description');
     finalMap.remove(description);
   }
 
   ///Remove version if version exists in flavor
   if (map.containsKey(version)) {
-    logger.trace('Removing $version');
+    logger.trace('Removing: $version');
     finalMap.remove(version);
   }
 
   ///Remove homepage if homepage exists in flavor
   if (map.containsKey(homepage)) {
-    logger.trace('Removing $homepage');
+    logger.trace('Removing: $homepage');
     finalMap.remove(homepage);
   }
 
   ///Remove repository if repository exists in flavor
   if (map.containsKey(repository)) {
-    logger.trace('Removing $repository');
+    logger.trace('Removing: $repository');
     finalMap.remove(repository);
   }
 
   ///Remove issueTracker if issueTracker exists in flavor
   if (map.containsKey(issueTracker)) {
-    logger.trace('Removing $issueTracker');
+    logger.trace('Removing: $issueTracker');
     finalMap.remove(issueTracker);
   }
 
   ///Remove documentation if documentation exists in flavor
   if (map.containsKey(documentation)) {
-    logger.trace('Removing $documentation');
+    logger.trace('Removing: $documentation');
     finalMap.remove(documentation);
   }
 
   ///Remove publish_to if publish_to exists in flavor
   if (map.containsKey(publishTo)) {
-    logger.trace('Removing $publishTo');
+    logger.trace('Removing: $publishTo');
     finalMap.remove(publishTo);
   }
 
   ///Remove environment if environment exists in flavor
   if (map.containsKey(environment)) {
-    logger.trace('Removing $environment');
+    logger.trace('Removing: $environment');
     finalMap.remove(environment);
   }
 
   ///Check if dependencies key exists if so then
   ///Loop through all the dependencies and remove it.
   if (map.containsKey(dependencies)) {
-    map[dependencies].forEach((key, value) {
-      if (finalMap[dependencies].containsKey(key)) {
-        logger.trace('Removing dependency $key');
+    map[dependencies]?.forEach((key, value) {
+      if (finalMap[dependencies]?.containsKey(key) ?? false) {
+        logger.trace('Removing dependency: $key');
         finalMap[dependencies].remove(key);
       }
     });
-    if ((finalMap[dependencies] as Map).isEmpty) {
+    if (finalMap[dependencies] != null &&
+        (finalMap[dependencies] as Map).isEmpty) {
       finalMap.remove(dependencies);
     }
   }
@@ -122,13 +140,14 @@ Future<Map<String, dynamic>?> removeValuesFromPubspec({
   ///Check if dev_dependencies key exists if so then
   ///Loop through all the dev_dependencies and remove it.
   if (map.containsKey(devDependencies)) {
-    map[devDependencies].forEach((key, value) {
-      if (finalMap[devDependencies].containsKey(key)) {
-        logger.trace('Deleting dev_dependency $key');
+    map[devDependencies]?.forEach((key, value) {
+      if (finalMap[devDependencies]?.containsKey(key) ?? false) {
+        logger.trace('Deleting dev_dependency: $key');
         finalMap[devDependencies].remove(key);
       }
     });
-    if ((finalMap[devDependencies] as Map).isEmpty) {
+    if (finalMap[devDependencies] != null &&
+        (finalMap[devDependencies] as Map).isEmpty) {
       finalMap.remove(devDependencies);
     }
   }
@@ -136,14 +155,36 @@ Future<Map<String, dynamic>?> removeValuesFromPubspec({
   ///Check if dependency_overrides key exists if so then
   ///Loop through all the dependency_overrides and remove it.
   if (map.containsKey(dependencyOverrides)) {
-    map[dependencyOverrides].forEach((key, value) {
-      if (finalMap[dependencyOverrides].containsKey(key)) {
-        logger.trace('Deleting dependency_override $key');
+    map[dependencyOverrides]?.forEach((key, value) {
+      if (finalMap[dependencyOverrides]?.containsKey(key) ?? false) {
+        logger.trace('Deleting dependency_override: $key');
         finalMap[dependencyOverrides].remove(key);
       }
     });
-    if ((finalMap[dependencyOverrides] as Map).isEmpty) {
+
+    if (finalMap[dependencyOverrides] != null &&
+        (finalMap[dependencyOverrides] as Map).isEmpty) {
       finalMap.remove(dependencyOverrides);
+    }
+
+    /// Removing the keys from pubspec_overrides.yaml
+    if (pubspecOverridesMap != null &&
+        pubspecOverridesMap[dependencyOverrides] != null) {
+      map[dependencyOverrides]?.forEach(
+        (key, value) {
+          if (pubspecOverridesMap[dependencyOverrides]?.containsKey(key) ??
+              false) {
+            logger.trace(
+                'Deleting dependency_override from pubspec_overrides.yaml: $key');
+            pubspecOverridesMap[dependencyOverrides].remove(key);
+          }
+        },
+      );
+
+      if (pubspecOverridesMap[dependencyOverrides] != null &&
+          (pubspecOverridesMap[dependencyOverrides] as Map).isEmpty) {
+        pubspecOverridesMap.remove(dependencyOverrides);
+      }
     }
   }
 
@@ -216,5 +257,5 @@ Future<Map<String, dynamic>?> removeValuesFromPubspec({
     }
   }
 
-  return finalMap;
+  return (pubspecMap: finalMap, pubspecOverridesMap: pubspecOverridesMap);
 }

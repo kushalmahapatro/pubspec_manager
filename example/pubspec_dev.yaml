@@ -1,9 +1,13 @@
 description: prod version of pubspec.yaml
-version: 0.0.1-prod
+version: 0.0.1-dev
 
 dependencies:
   example_dependency:
     path: example/dependency
+
+dependency_overrides:
+  flutter_lints: ^9.0.0
+  unwanted_override: ^1.0.1-override
 
 dev_dependencies:
   lints: ^2.1.1
@@ -20,15 +24,15 @@ flutter:
           weight: 500
         - asset: dev/font2/400.ttf
           weight: 400
-
 remove:
   homepage: https://test.homepage
-
   dependencies:
     unwanted_dependency:
 
   dev_dependencies:
-    dependency_overrides:
+
+  dependency_overrides:
+    unwanted_override:
 
   flutter:
     assets:

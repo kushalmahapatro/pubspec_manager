@@ -1,3 +1,12 @@
+### 0.3.0+1 (2024-01-25)
+#### Added
+- Added support to mange overridden dependencies in pubspec_overrides.yaml file.
+- Added support to avoid running pub get after managing the dependencies, can be called by `pubm -f <flavor> -b no-pub-get` or `dart run pub:manage -f <flavor> -b no-pub-get`, -b is abbreviation for `--build-args`
+- Added support to both `flutter pub get` and `dart pub get` commands (If the pubspec.yaml file contains flutter sdk dependency then it will run flutter pub get else dart pub get).
+
+#### Fixed
+- Fixed the issue of of removing and managing dependencies when clubbed together. 
+
 ### 0.2.0 (2023-11-04)
 #### Added
 - Added support to remove values from pubspec.yaml file.
